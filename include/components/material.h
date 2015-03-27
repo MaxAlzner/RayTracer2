@@ -10,15 +10,22 @@ namespace RAY_NAMESPACE
 		{
 		public:
 
+			enum TEXTURETYPE
+			{
+				TEXTURE_COLOR,
+				TEXTURE_NORMAL,
+				TEXTURE_SPECULAR,
+				TEXTURE_TRANSPARENCY,
+				TEXTURE_EMISSIVE,
+				TEXTURE_DISPLACEMENT,
+			};
+
 			inline Material() :
 				Component("Material"),
 				color(0) {}
-			inline Material(Image::Surface* color) :
-				Component(),
-				color(color) {}
 			inline ~Material() {}
 
-			const Image::Surface* color;
+			Image::Surface* color;
 
 		};
 

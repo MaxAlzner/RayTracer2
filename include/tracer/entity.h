@@ -22,6 +22,9 @@ namespace RAY_NAMESPACE
 
 			void add(Components::Component* component);
 
+			void attach(Mesh::Shape* shape);
+			void attach(Image::Surface* surface, Components::Material::TEXTURETYPE type);
+
 			Components::Component* findComponent(String type);
 
 			Components::Transform* transform;

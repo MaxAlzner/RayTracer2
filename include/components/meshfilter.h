@@ -15,7 +15,7 @@ namespace RAY_NAMESPACE
 				shape(0) {}
 			inline ~MeshFilter() {}
 
-			const Mesh::Shape* shape;
+			Mesh::Shape* shape;
 
 		};
 

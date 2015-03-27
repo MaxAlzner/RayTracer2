@@ -12,11 +12,12 @@ namespace RAY_NAMESPACE
 
 			inline Camera() :
 				Component("Camera"),
-				aperture(4.0f, 3.0f),
-				focalDepth(-1.0f) {}
+				focalDepth(-1.0f),
+				aperture(4.0f, 3.0f) {}
 			inline ~Camera() {}
 
 			inline void adjust(float width, float height);
+			inline void adjust();
 
 			inline ray getRay(float u, float v);
 			inline ray getRay(vec2& uv);

@@ -31,13 +31,15 @@ namespace RAY_NAMESPACE
 
 			Image::Surface* flatten() const;
 
-			void trace(int x, int y, TraceStack* stack);
+			void emit(TraceStack* stack);
+
+			rayhit trace(int x, int y, TraceStack* stack);
 
 			int width;
 			int height;
 			int reflectDepth;
 			int multiSampleDepth;
-			Primitives::HitBuffer* hits;
+			HitBuffer* hits;
 
 		};
 

@@ -3,7 +3,7 @@
 
 namespace RAY_NAMESPACE
 {
-	namespace Primitives
+	namespace Tracer
 	{
 
 		class RAY_API HitBuffer : public IObject
@@ -22,23 +22,25 @@ namespace RAY_NAMESPACE
 				height(height < 1 ? 1 : height),
 				depth(depth < 1 ? 1 : depth),
 				size(this->width * this->height * this->depth),
-				bytes(sizeof(RayHit) * this->size),
+				bytes(sizeof(rayhit) * this->size),
 				buffer(0) { this->build(); }
 			inline ~HitBuffer() { this->dispose(); }
 
 			bool isEmpty() const;
 
-			inline RayHit& get(const int x, const int y);
-			inline RayHit& get(const int x, const int y, const int z);
+			inline rayhit& get(const int x, const int y);
+			inline rayhit& get(const int x, const int y, const int z);
 
-			inline RayHit& operator[](const int index);
+			inline void clear();
+
+			inline rayhit& operator[](const int index);
 
 			const int width;
 			const int height;
 			const int depth;
 			const int size;
 			const int bytes;
-			RayHit* buffer;
+			rayhit* buffer;
 
 		protected:
 

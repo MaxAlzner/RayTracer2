@@ -13,10 +13,6 @@ namespace RAY_NAMESPACE
 		{
 			this->transform = new Transform;
 			this->add(this->transform);
-			this->material = new Material;
-			this->add(this->material);
-			this->meshfilter = new MeshFilter;
-			this->add(this->meshfilter);
 		}
 		RAY_API void Entity::dispose()
 		{
@@ -46,6 +42,32 @@ namespace RAY_NAMESPACE
 			{
 				component->object = this;
 				this->components.add(component);
+			}
+		}
+
+		RAY_API void Entity::attach(Mesh::Shape* shape)
+		{
+			if (shape != 0)
+			{
+				this->meshfilter = new MeshFilter;
+				this->add(this->meshfilter);
+				this->meshfilter->shape = shape;
+			}
+		}
+		RAY_API void Entity::attach(Image::Surface* surface, Material::TEXTURETYPE type)
+		{
+			if (surface != 0)
+			{
+				this->material = new Material;
+				this->add(this->material);
+				switch (type)
+				{
+				case Material::TEXTURE_COLOR:
+					this->material->color = surface;
+					break;
+				default:
+					break;
+				}
 			}
 		}
 

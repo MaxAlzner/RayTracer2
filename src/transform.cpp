@@ -39,5 +39,10 @@ namespace RAY_NAMESPACE
 			this->forward = vec3(0.0f, 0.0f, 1.0f);
 		}
 
+		RAY_API inline void Transform::look(const vec3& focus)
+		{
+
+		}
+
 	}
 }

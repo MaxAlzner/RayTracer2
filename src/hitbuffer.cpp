@@ -4,7 +4,7 @@
 
 namespace RAY_NAMESPACE
 {
-	namespace Primitives
+	namespace Tracer
 	{
 
 		bool HitBuffer::isEmpty() const
@@ -12,16 +12,21 @@ namespace RAY_NAMESPACE
 			return this->buffer == 0;
 		}
 
-		inline RayHit& HitBuffer::get(const int x, const int y)
+		inline rayhit& HitBuffer::get(const int x, const int y)
 		{
 			return this->buffer[(this->width * (y % this->height)) + (x % this->width)];
 		}
-		inline RayHit& HitBuffer::get(const int x, const int y, const int z)
+		inline rayhit& HitBuffer::get(const int x, const int y, const int z)
 		{
 			return this->buffer[(this->width * this->height * (z % this->depth)) + (this->width * (y % this->height)) + (x % this->width)];
 		}
 
-		inline RayHit& HitBuffer::operator[](const int index)
+		inline void HitBuffer::clear()
+		{
+			memset(this->buffer, 0, this->bytes);
+		}
+
+		inline rayhit& HitBuffer::operator[](const int index)
 		{
 			return this->buffer[index % this->size];
 		}
@@ -30,7 +35,7 @@ namespace RAY_NAMESPACE
 		{
 			if (this->size > 0)
 			{
-				this->buffer = new RayHit[this->size];
+				this->buffer = new rayhit[this->size];
 			}
 		}
 		void HitBuffer::dispose()

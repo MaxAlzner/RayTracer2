@@ -61,8 +61,15 @@
       <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
+      <Command>
+xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
+xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+xcopy "$(SolutionDir)..\bin\$(Configuration)\*.dll" "$(SolutionDir)..\win32\bin\" /Y
+xcopy "$(SolutionDir)..\bin\$(Configuration)\*.pdb" "$(SolutionDir)..\win32\bin\" /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -81,8 +88,15 @@
       <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
+      <Command>
+xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
+xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+xcopy "$(SolutionDir)..\bin\$(Configuration)\*.dll" "$(SolutionDir)..\win32\bin\" /Y
+xcopy "$(SolutionDir)..\bin\$(Configuration)\*.pdb" "$(SolutionDir)..\win32\bin\" /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\ColdBrew_Framework\framework.vcxproj">
@@ -90,11 +104,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\axiscube.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\hitbuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\photo.cpp" />
+    <ClCompile Include="src\sphere.cpp" />
     <ClCompile Include="src\tracestack.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
@@ -104,8 +120,9 @@
     <ClInclude Include="include\components\meshfilter.h" />
     <ClInclude Include="include\components\transform.h" />
     <ClInclude Include="include\components\material.h" />
-    <ClInclude Include="include\primitives\hitbuffer.h" />
-    <ClInclude Include="include\primitives\rayhit.h" />
+    <ClInclude Include="include\shapes\axiscube.h" />
+    <ClInclude Include="include\shapes\sphere.h" />
+    <ClInclude Include="include\tracer\hitbuffer.h" />
     <ClInclude Include="include\RayTracer.h" />
     <ClInclude Include="include\RayTracer_setup.h" />
     <ClInclude Include="include\tracer\entity.h" />

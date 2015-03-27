@@ -17,23 +17,20 @@
 
 namespace RAY_NAMESPACE
 {
-	namespace Primitives
-	{
-		class RAY_API RayHit;
-		class RAY_API HitBuffer;
-	}
-
 	namespace Components
 	{
 		class RAY_API Component;
 		class RAY_API Transform;
 		class RAY_API Material;
 		class RAY_API MeshFilter;
+		class RAY_API Light;
 		class RAY_API Camera;
 	}
 
 	namespace Tracer
 	{
+		class RAY_API Lumination;
+		class RAY_API HitBuffer;
 		class RAY_API Entity;
 		class RAY_API TraceStack;
 		class RAY_API Photo;

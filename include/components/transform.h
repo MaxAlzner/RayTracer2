@@ -14,12 +14,14 @@ namespace RAY_NAMESPACE
 				Component("Transform"),
 				parent(0) { this->zero(); }
 			inline Transform(Transform* parent) :
-				Component(),
+				Component("Transform"),
 				parent(parent != this ? parent : 0) { this->zero(); }
 			inline ~Transform() {}
 
 			inline void recalculate();
 			inline void zero();
+
+			inline void look(const vec3& focus);
 
 			const Transform* parent;
 			mat4 transformation;

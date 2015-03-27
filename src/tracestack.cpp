@@ -37,6 +37,12 @@ namespace RAY_NAMESPACE
 			if (entity != 0)
 			{
 				this->stack.add(entity);
+
+				Camera* camera = (Camera*)entity->findComponent("Camera");
+				if (camera != 0)
+				{
+					this->camera = camera;
+				}
 			}
 		}
 

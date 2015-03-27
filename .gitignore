@@ -76,6 +76,7 @@ $RECYCLE.BIN/
 
 bin/*
 obj/*
+_old/*
 */bin/*
 */obj/*
 *.sdf
