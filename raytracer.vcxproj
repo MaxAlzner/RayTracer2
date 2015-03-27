@@ -53,22 +53,21 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
-xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
+      <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
+xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
-xcopy "$(SolutionDir)..\bin\$(Configuration)\*.dll" "$(SolutionDir)..\win32\bin\" /Y
-xcopy "$(SolutionDir)..\bin\$(Configuration)\*.pdb" "$(SolutionDir)..\win32\bin\" /Y</Command>
+xcopy "$(ProjectDir)bin\$(Configuration)\*.dll" "$(ProjectDir)win32\bin\" /Y
+xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,24 +77,23 @@ xcopy "$(SolutionDir)..\bin\$(Configuration)\*.pdb" "$(SolutionDir)..\win32\bin\
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
-xcopy "$(USERPROFILE)\Documents\GitHub\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
+      <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
+xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
-xcopy "$(SolutionDir)..\bin\$(Configuration)\*.dll" "$(SolutionDir)..\win32\bin\" /Y
-xcopy "$(SolutionDir)..\bin\$(Configuration)\*.pdb" "$(SolutionDir)..\win32\bin\" /Y</Command>
+xcopy "$(ProjectDir)bin\$(Configuration)\*.dll" "$(ProjectDir)win32\bin\" /Y
+xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
