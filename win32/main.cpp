@@ -9,58 +9,182 @@ using namespace cb::Object::Image;
 using namespace cb::Object::Mesh;
 
 using namespace Ray;
+using namespace Ray::Shapes;
 using namespace Ray::Components;
 using namespace Ray::Tracer;
 
+static Collection::Array<TraceShape*> shapes(32);
+static Collection::Array<Surface*> textures(32);
+
+static Photo* photo = 0;
+static TraceStack* stack = 0;
+
+Entity* Build(vec3 position, vec3 rotation, vec3 scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+{
+	Entity* entity = new Entity;
+	entity->build();
+	entity->transform->position = position;
+	entity->transform->rotation = rotation;
+	entity->transform->scale = scale;
+	if (material != 0)
+	{
+		entity->add(material);
+	}
+
+	if (color != 0)
+	{
+		entity->attach(color, TextureFilter::TEXTURE_COLOR);
+	}
+
+	if (normal != 0)
+	{
+		entity->attach(normal, TextureFilter::TEXTURE_NORMAL);
+	}
+
+	if (specular != 0)
+	{
+		entity->attach(specular, TextureFilter::TEXTURE_SPECULAR);
+	}
+
+	stack->add(entity);
+	return entity;
+}
+
+Entity* Camera(vec3 position, vec3 rotation, vec2 aperture, float focalDepth)
+{
+	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
+	Cameras::Camera* camera = new Cameras::Camera();
+	entity->add(camera);
+	camera->adjust(aperture.x, aperture.y);
+	camera->focalDepth = focalDepth;
+	return entity;
+}
+
+Entity* Cube(vec3 position, float scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+{
+	Entity* entity = Build(position, vec3(0.0f), vec3(scale), material, color, normal, specular);
+	TraceShape* cube = new Shapes::AxisCube;
+	cube->build();
+	shapes.add(cube);
+	entity->attach(cube);
+	return entity;
+}
+
+Entity* Sphere(vec3 position, float radius, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+{
+	Entity* entity = Build(position, vec3(0.0f), vec3(1.0f), material, color, normal, specular);
+	TraceShape* sphere = new Shapes::Sphere(radius);
+	sphere->build();
+	shapes.add(sphere);
+	entity->attach(sphere);
+	return entity;
+}
+
+Entity* StaticMesh(vec3 position, vec3 rotation, vec3 scale, TraceShape* shape, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+{
+	Entity* entity = Build(position, rotation, scale, material, color, normal, specular);
+	entity->attach(shape);
+	return entity;
+}
+
+Entity* PointLight(vec3 position, float intensity)
+{
+	Entity* entity = Build(position, vec3(0.0f), vec3(1.0f), 0, 0, 0, 0);
+	entity->add(new Lights::PointLight(intensity));
+	return entity;
+}
+
+Entity* DirectionalLight(vec3 rotation, float intensity)
+{
+	Entity* entity = Build(vec3(0.0f), rotation, vec3(1.0f), 0, 0, 0, 0);
+	entity->add(new Lights::DirectionalLight(intensity));
+	return entity;
+}
+
 int main(int argc, char** argv)
 {
-	Shape* sphere1 = new Shapes::Sphere(2.1f);
-	sphere1->build();
-	Shape* sphere2 = new Shapes::Sphere(2.0f);
-	sphere2->build();
-	Shape* cube1 = new Shapes::AxisCube;
-	cube1->build();
+	for (int i = 0; i < 8; i++)
+	{
+		TraceShape* shape = new TraceShape;
+		shape->build();
+		shapes.add(shape);
+	}
 
-	Photo* photo = new Photo(240, 160);
+	Shape::ReadWavefront(shapes[0], "data\\healing_crystal.obj");
+
+	for (int i = 0; i < textures.capacity(); i++)
+	{
+		Surface* surface = new Surface;
+		surface->build();
+		textures.add(surface);
+	}
+
+	Surface::ReadBitmap(textures[0], "data\\dungeon_arch_door_dif.bmp");
+	Surface::ReadBitmap(textures[1], "data\\dungeon_arch_door_normal.bmp");
+	Surface::ReadBitmap(textures[2], "data\\dungeon_arch_door_spec.bmp");
+	Surface::ReadBitmap(textures[3], "data\\dungeon_floor_dif.bmp");
+	Surface::ReadBitmap(textures[4], "data\\dungeon_floor_normal.bmp");
+	Surface::ReadBitmap(textures[5], "data\\dungeon_floor_spec.bmp");
+	Surface::ReadBitmap(textures[6], "data\\dungeon_wall_dirt_dif.bmp");
+	Surface::ReadBitmap(textures[7], "data\\dungeon_wall_dirt_normal.bmp");
+	Surface::ReadBitmap(textures[8], "data\\dungeon_wall_dirt_spec.bmp");
+
+	photo = new Photo(400, 300);
 	photo->build();
-	TraceStack* stack = new TraceStack;
+	stack = new TraceStack;
 	stack->build();
 
-	Entity* entity0 = new Entity;
-	entity0->build();
-	entity0->add(new Camera);
-	//entity0->transform->position.y -= 4.8f;
-	//entity0->transform->position.z -= 4.8f;
-	//entity0->transform->rotation.x += 30.0f;
-	stack->add(entity0);
+	Entity* camera = Camera(vec3(0.0f, 1.0f, 0.0f), vec3(-10.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
 
-	Entity* entity1 = new Entity;
-	entity1->build();
-	entity1->attach(sphere1);
-	entity1->transform->position.x -= 3.2f;
-	entity1->transform->position.y -= 2.0f;
-	stack->add(entity1);
+	//Cube(
+	//	vec3(0.0f, 1.2f, -3.2f), 2.0f,
+	//	//new Materials::PhongMaterial,
+	//	new Materials::CookTorranceMaterial(0.8f, 1.4f),
+	//	textures[3],
+	//	textures[4],
+	//	textures[5]
+	//	);
+	//Cube(
+	//	vec3(-4.0f, 0.1f, -1.8f), 1.4f,
+	//	new Materials::PhongMaterial,
+	//	//new Materials::DiffuseMaterial,
+	//	textures[0],
+	//	textures[1],
+	//	textures[2]
+	//	);
+	//Sphere(
+	//	vec3(-3.2f, -2.0f, 0.0f), 2.1f,
+	//	//new Materials::BlinnMaterial(64.0f),
+	//	new Materials::CookTorranceMaterial(0.8f, 1.4f),
+	//	textures[6],
+	//	textures[7],
+	//	textures[8]
+	//	);
+	//Sphere(
+	//	vec3(-1.0f, 0.5f, 0.0f), 0.4f,
+	//	new Materials::BlinnMaterial,
+	//	//new Materials::DiffuseMaterial,
+	//	textures[0],
+	//	textures[1],
+	//	textures[2]
+	//	);
 
-	Entity* entity2 = new Entity;
-	entity2->build();
-	entity2->attach(sphere2);
-	entity2->transform->position.x += 3.2f;
-	entity2->transform->position.y -= 3.0f;
-	stack->add(entity2);
+	StaticMesh(
+		vec3(0.0f, 1.0f, -1.6f),
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(3.0f),
+		shapes[0],
+		new Materials::PhongMaterial,
+		textures[3],
+		textures[4],
+		textures[5]
+		);
 
-	Entity* entity3 = new Entity;
-	entity3->build();
-	entity3->attach(cube1);
-	entity3->transform->position.x += 0.0f;
-	entity3->transform->position.y += 1.2f;
-	entity3->transform->position.z -= 0.8f;
-	entity3->transform->scale *= 2.0f;
-	stack->add(entity3);
+	DirectionalLight(vec3(-20.0f, 140.0f, 0.0f), 1.0f);
+	//PointLight(vec3(-2.0f, 0.2f, 2.0f), 1.0f);
+	//PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
 
-	stack->camera->focalDepth = 3.4f;
-
-#if 1
-	const int frames = 8;
+	const int frames = 20;
 	for (int i = 0; i < frames; i++)
 	{
 		float k = float(i) / float(frames);
@@ -68,41 +192,51 @@ int main(int argc, char** argv)
 		float u = cos(theta);
 		float v = sin(theta);
 
-		entity0->transform->position.x = 6.4f * u;
-		entity0->transform->position.z = 6.4f * v;
-		entity0->transform->rotation.y = (k * 360.0f) + 90.0f;
+		camera->transform->position.x = 8.0f * u;
+		camera->transform->position.z = 8.0f * v;
+		camera->transform->rotation.y = (k * 360.0f) + 90.0f;
 
 		char* filename = new char[32];
 		memset(filename, 0, sizeof(char) * 32);
-		sprintf(filename, "trace.00%d.png", i + 1);
+		sprintf(filename, "trace.%03d.png", i + 1);
 
-		photo->emit(stack);
+		photo->render(stack);
 		Surface* surface = photo->flatten();
 		Surface::WritePng(surface, String(filename));
+		printf("%s\n", filename);
 
 		surface->dispose();
 		delete surface;
 		delete[] filename;
 	}
-#else
-	photo->emit(stack);
-	Surface* surface = photo->flatten();
-	Surface::WritePng(surface, "trace.001.png");
-	surface->dispose();
-	delete surface;
-#endif
 
 	stack->dispose();
 	delete stack;
 	photo->dispose();
 	delete photo;
 
-	cube1->dispose();
-	delete cube1;
-	sphere2->dispose();
-	delete sphere2;
-	sphere1->dispose();
-	delete sphere1;
+	for (int i = 0; textures.inside(i); i++)
+	{
+		Surface* surface = textures[i];
+		if (surface != 0)
+		{
+			surface->dispose();
+			delete surface;
+		}
+	}
+
+	for (int i = 0; shapes.inside(i); i++)
+	{
+		Shape* shape = shapes[i];
+		if (shape != 0)
+		{
+			shape->dispose();
+			delete shape;
+		}
+	}
+
+	textures.clear();
+	shapes.clear();
 
 	//_getch();
 	return 0;

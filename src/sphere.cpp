@@ -7,13 +7,14 @@ namespace RAY_NAMESPACE
 	namespace Shapes
 	{
 		using namespace Object::Mesh;
+		using namespace DataObjects;
 
 		RAY_API void Sphere::normalize()
 		{
 			this->radius = 1.0f;
 		}
 
-		RAY_API bool Sphere::hitByRay(const ray& ray, const transformation<float>& trans, rayhit* hit)
+		RAY_API bool Sphere::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
 		{
 			vec3 p = (ray.origin - trans.translation);
 			float a = Math::dot(ray.direction, ray.direction);
@@ -30,25 +31,30 @@ namespace RAY_NAMESPACE
 
 				if (t0 >= 0.0f && t1 >= 0.0f)
 				{
-					vec3 intersection = t0 < t1 ?
-						ray.origin + (ray.direction * t0) :
-						ray.origin + (ray.direction * t1);
 					float t = t0 < t1 ? t0 : t1;
 
-					vec3 normal = Math::normalize(intersection - trans.translation);
-
-					if (hit != 0)
+					if (t <= ray.length)
 					{
-						*hit = rayhit(
-							ray,
-							t,
-							intersection,
-							Math::clamp(vec2((normal.x + 1.0f) / 2.0f, (normal.y + 1.0f) / 2.0f), 0.0f, 1.0f),
-							normal,
-							this);
-					}
+						vec3 intersection = ray.origin + (ray.direction * t);
+						vec3 normal = Math::normalize(intersection - trans.translation);
+						vec3 tangent = Math::cross(normal, vec3(0.0f, 1.0f, 0.0f));
+						vec3 binormal = Math::cross(normal, tangent);
 
-					return true;
+						if (hit != 0)
+						{
+							*hit = RayHit(
+								ray,
+								t,
+								intersection,
+								Math::clamp(vec2((normal.x + 1.0f) / 2.0f, (normal.y + 1.0f) / 2.0f), 0.0f, 1.0f),
+								normal,
+								tangent,
+								binormal,
+								this);
+						}
+
+						return true;
+					}
 				}
 			}
 

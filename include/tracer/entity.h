@@ -11,9 +11,12 @@ namespace RAY_NAMESPACE
 		public:
 
 			inline Entity() :
+				stack(0),
 				transform(0),
+				meshfilter(0),
 				material(0),
-				meshfilter(0) {}
+				light(0) {}
+			inline ~Entity() {}
 
 			virtual void build();
 			virtual void dispose();
@@ -22,14 +25,17 @@ namespace RAY_NAMESPACE
 
 			void add(Components::Component* component);
 
-			void attach(Mesh::Shape* shape);
-			void attach(Image::Surface* surface, Components::Material::TEXTURETYPE type);
+			void attach(Shapes::TraceShape* shape);
+			void attach(Image::Surface* surface, Components::TextureFilter::TEXTURETYPE type);
 
 			Components::Component* findComponent(String type);
 
+			TraceStack* stack;
 			Components::Transform* transform;
-			Components::Material* material;
 			Components::MeshFilter* meshfilter;
+			Components::Materials::Material* material;
+			Components::Cameras::Camera* camera;
+			Components::Lights::Light* light;
 			Collection::List<Components::Component*> components;
 
 		};

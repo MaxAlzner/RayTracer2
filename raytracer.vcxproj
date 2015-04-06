@@ -58,7 +58,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ColdBrew.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
@@ -84,7 +84,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>cb_framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ColdBrew.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
@@ -103,28 +103,52 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\axiscube.cpp" />
+    <ClCompile Include="src\blinnmaterial.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\cooktorrancematerial.cpp" />
+    <ClCompile Include="src\diffusematerial.cpp" />
+    <ClCompile Include="src\directionallight.cpp" />
     <ClCompile Include="src\entity.cpp" />
-    <ClCompile Include="src\hitbuffer.cpp" />
+    <ClCompile Include="src\lumination.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\phongmaterial.cpp" />
     <ClCompile Include="src\photo.cpp" />
+    <ClCompile Include="src\photoemitter.cpp" />
+    <ClCompile Include="src\pointlight.cpp" />
     <ClCompile Include="src\sphere.cpp" />
+    <ClCompile Include="src\fragment.cpp" />
+    <ClCompile Include="src\texturefilter.cpp" />
+    <ClCompile Include="src\traceshape.cpp" />
     <ClCompile Include="src\tracestack.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\components\camera.h" />
+    <ClInclude Include="include\components\cameras\camera.h" />
     <ClInclude Include="include\components\component.h" />
+    <ClInclude Include="include\components\lights\directionallight.h" />
+    <ClInclude Include="include\components\lights\light.h" />
+    <ClInclude Include="include\components\lights\pointlight.h" />
+    <ClInclude Include="include\components\materials\blinnmaterial.h" />
+    <ClInclude Include="include\components\materials\cooktorrancematerial.h" />
+    <ClInclude Include="include\components\materials\diffusematerial.h" />
+    <ClInclude Include="include\components\materials\phongmaterial.h" />
     <ClInclude Include="include\components\meshfilter.h" />
+    <ClInclude Include="include\components\texturefilter.h" />
     <ClInclude Include="include\components\transform.h" />
-    <ClInclude Include="include\components\material.h" />
+    <ClInclude Include="include\components\materials\material.h" />
+    <ClInclude Include="include\dataobjects\rayhit.h" />
     <ClInclude Include="include\shapes\axiscube.h" />
     <ClInclude Include="include\shapes\sphere.h" />
-    <ClInclude Include="include\tracer\hitbuffer.h" />
     <ClInclude Include="include\RayTracer.h" />
     <ClInclude Include="include\RayTracer_setup.h" />
+    <ClInclude Include="include\shapes\traceshape.h" />
     <ClInclude Include="include\tracer\entity.h" />
+    <ClInclude Include="include\dataobjects\lighting.h" />
+    <ClInclude Include="include\dataobjects\lumination.h" />
     <ClInclude Include="include\tracer\photo.h" />
+    <ClInclude Include="include\tracer\photoemitter.h" />
+    <ClInclude Include="include\dataobjects\fragment.h" />
     <ClInclude Include="include\tracer\tracestack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

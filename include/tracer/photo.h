@@ -10,18 +10,18 @@ namespace RAY_NAMESPACE
 		{
 		public:
 
+			friend class PhotoEmitter;
+
 			inline Photo() :
-				width(0),
-				height(0),
 				reflectDepth(1),
 				multiSampleDepth(1),
-				hits(0) {}
+				_width(0),
+				_height(0) {}
 			inline Photo(int width, int height) :
-				width(width),
-				height(height),
 				reflectDepth(1),
 				multiSampleDepth(1),
-				hits(0) {}
+				_width(width),
+				_height(height) {}
 			inline ~Photo() {}
 
 			virtual void build();
@@ -29,17 +29,22 @@ namespace RAY_NAMESPACE
 
 			virtual bool isEmpty() const;
 
-			Image::Surface* flatten() const;
+			Image::Surface* flatten();
 
-			void emit(TraceStack* stack);
+			void render(TraceStack* stack);
 
-			rayhit trace(int x, int y, TraceStack* stack);
-
-			int width;
-			int height;
 			int reflectDepth;
 			int multiSampleDepth;
-			HitBuffer* hits;
+
+		protected:
+
+			static unsigned int _stdcall _renderCallback(void* data);
+
+			int _width;
+			int _height;
+			Collection::Map<DataObjects::RayHit> _geometrypass;
+			Collection::Map<DataObjects::Fragment> _fragmentpass;
+			Collection::Map<DataObjects::Lumination> _lightpass;
 
 		};
 

@@ -13,15 +13,19 @@ namespace RAY_NAMESPACE
 			inline TraceStack() {}
 			inline ~TraceStack() {}
 
-			virtual void build();
-			virtual void dispose();
+			void build();
+			void dispose();
 
-			virtual bool isEmpty() const;
+			bool isEmpty() const;
+
+			Entity* trace(const ray& ray, DataObjects::RayHit* hit);
+			DataObjects::Lumination albedo(const DataObjects::Fragment& fragment);
 
 			void add(Entity* entity);
 
 			Collection::List<Entity*> stack;
-			Components::Camera* camera;
+			Collection::List<Components::Lights::Light*> lights;
+			Components::Cameras::Camera* camera;
 
 		};
 

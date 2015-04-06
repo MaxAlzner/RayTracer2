@@ -16,9 +16,9 @@ namespace RAY_NAMESPACE
 		}
 		RAY_API void Entity::dispose()
 		{
-			for (ListIterator<Component*>* i = this->components.iteratorAtEnd(); i->inside(); i->previous())
+			for (Iterator<Component*> i = this->components.iteratorAtEnd(); i.inside(); i.previous())
 			{
-				Component* component = i->current();
+				Component* component = i.current();
 				if (component != 0)
 				{
 					delete component;
@@ -42,10 +42,25 @@ namespace RAY_NAMESPACE
 			{
 				component->object = this;
 				this->components.add(component);
+
+				if (component->type == "Material")
+				{
+					this->material = (Materials::Material*)component;
+				}
+				else if (component->type == "Camera")
+				{
+					this->camera = (Cameras::Camera*)component;
+					this->stack->camera = this->camera;
+				}
+				else if (component->type == "Light")
+				{
+					this->light = (Lights::Light*)component;
+					this->stack->lights.add(this->light);
+				}
 			}
 		}
 
-		RAY_API void Entity::attach(Mesh::Shape* shape)
+		RAY_API void Entity::attach(Shapes::TraceShape* shape)
 		{
 			if (shape != 0)
 			{
@@ -54,16 +69,21 @@ namespace RAY_NAMESPACE
 				this->meshfilter->shape = shape;
 			}
 		}
-		RAY_API void Entity::attach(Image::Surface* surface, Material::TEXTURETYPE type)
+		RAY_API void Entity::attach(Image::Surface* surface, TextureFilter::TEXTURETYPE type)
 		{
-			if (surface != 0)
+			if (surface != 0 && type != TextureFilter::TEXTURE_NONE && this->material != 0)
 			{
-				this->material = new Material;
-				this->add(this->material);
+				TextureFilter* filter = new TextureFilter(surface, type);
 				switch (type)
 				{
-				case Material::TEXTURE_COLOR:
-					this->material->color = surface;
+				case TextureFilter::TEXTURE_COLOR:
+					this->material->color = filter;
+					break;
+				case TextureFilter::TEXTURE_NORMAL:
+					this->material->normal = filter;
+					break;
+				case TextureFilter::TEXTURE_SPECULAR:
+					this->material->specular = filter;
 					break;
 				default:
 					break;
@@ -73,9 +93,9 @@ namespace RAY_NAMESPACE
 
 		RAY_API Component* Entity::findComponent(String type)
 		{
-			for (ListIterator<Component*>* i = this->components.iterator(); i->inside(); i->next())
+			for (Iterator<Component*> i = this->components.iterator(); i.inside(); i.next())
 			{
-				Component* component = i->current();
+				Component* component = i.current();
 				if (component != 0 && component->type == type)
 				{
 					return component;

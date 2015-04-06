@@ -13,9 +13,12 @@ namespace RAY_NAMESPACE
 			inline MeshFilter() :
 				Component("MeshFilter"),
 				shape(0) {}
+			inline MeshFilter(Shapes::TraceShape* shape) :
+				Component("MeshFilter"),
+				shape(shape) {}
 			inline ~MeshFilter() {}
 
-			Mesh::Shape* shape;
+			Shapes::TraceShape* shape;
 
 		};
 

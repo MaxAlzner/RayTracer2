@@ -6,17 +6,17 @@ namespace RAY_NAMESPACE
 	namespace Shapes
 	{
 
-		class RAY_API AxisCube : public Object::Mesh::Shape
+		class RAY_API AxisCube : public TraceShape
 		{
 		public:
 
-			AxisCube() {}
+			AxisCube() : TraceShape() {}
 			~AxisCube() {}
 
 			void build();
 			void dispose();
 
-			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, rayhit* hit);
+			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
 
 			const int elements() const;
 			const int components() const;

@@ -6,17 +6,17 @@ namespace RAY_NAMESPACE
 	namespace Shapes
 	{
 
-		class RAY_API Sphere : public Object::Mesh::Shape
+		class RAY_API Sphere : public TraceShape
 		{
 		public:
 
-			Sphere() : radius(1.0f) {}
-			Sphere(float radius) : radius(radius) {}
+			Sphere() : TraceShape(), radius(1.0f) {}
+			Sphere(float radius) : TraceShape(), radius(radius) {}
 			~Sphere() {}
 
 			void normalize();
 
-			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, rayhit* hit);
+			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
 
 			const int elements() const;
 			const int components() const;

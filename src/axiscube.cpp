@@ -7,6 +7,7 @@ namespace RAY_NAMESPACE
 	namespace Shapes
 	{
 		using namespace Object::Mesh;
+		using namespace DataObjects;
 
 		RAY_API void AxisCube::build()
 		{
@@ -20,6 +21,20 @@ namespace RAY_NAMESPACE
 			this->normals[3] = vec3(1.0f, 0.0f, 0.0f);
 			this->normals[4] = vec3(0.0f, 1.0f, 0.0f);
 			this->normals[5] = vec3(0.0f, 0.0f, 1.0f);
+			this->tangents = component<vec3>(new vec3[6], 6, 0);
+			this->tangents[0] = vec3(0.0f, 0.0f, -1.0f);
+			this->tangents[1] = vec3(1.0f, 0.0f, 0.0f);
+			this->tangents[2] = vec3(1.0f, 0.0f, 0.0f);
+			this->tangents[3] = vec3(0.0f, 0.0f, 1.0f);
+			this->tangents[4] = vec3(1.0f, 0.0f, 0.0f);
+			this->tangents[5] = vec3(1.0f, 0.0f, 0.0f);
+			this->binormals = component<vec3>(new vec3[6], 6, 0);
+			this->binormals[0] = vec3(0.0f, -1.0f, 0.0f);
+			this->binormals[1] = vec3(0.0f, 0.0f, -1.0f);
+			this->binormals[2] = vec3(0.0f, -1.0f, 0.0f);
+			this->binormals[3] = vec3(0.0f, 1.0f, 0.0f);
+			this->binormals[4] = vec3(0.0f, 0.0f, 1.0f);
+			this->binormals[5] = vec3(0.0f, 1.0f, 0.0f);
 		}
 		RAY_API void AxisCube::dispose()
 		{
@@ -34,9 +49,21 @@ namespace RAY_NAMESPACE
 				delete[] this->normals.buffer;
 				this->normals = component<vec3>();
 			}
+
+			if (this->tangents.buffer != 0)
+			{
+				delete[] this->tangents.buffer;
+				this->tangents = component<vec3>();
+			}
+
+			if (this->binormals.buffer != 0)
+			{
+				delete[] this->binormals.buffer;
+				this->binormals = component<vec3>();
+			}
 		}
 
-		RAY_API bool AxisCube::hitByRay(const ray& ray, const transformation<float>& trans, rayhit* hit)
+		RAY_API bool AxisCube::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
 		{
 			vec3 p0 = (vec3(this->vertices[0]) * trans.scale) + trans.translation;
 			vec3 p1 = (vec3(this->vertices[1]) * trans.scale) + trans.translation;
@@ -136,12 +163,11 @@ namespace RAY_NAMESPACE
 			float kEpsilon = 1.0f;
 			if (t0 < t1 && t1 > kEpsilon)
 			{
-				float t = t0 > kEpsilon ? t0: t1;
+				float t = t0 > kEpsilon ? t0 : t1;
 
 				if (t <= ray.length)
 				{
 					vec3 intersection = ray.origin + (ray.direction * t);
-					vec3 normal = this->normals[facein];
 
 					float width = abs(p1.x - p0.x);
 					float height = abs(p1.y - p0.y);
@@ -175,12 +201,14 @@ namespace RAY_NAMESPACE
 
 					if (hit != 0)
 					{
-						*hit = rayhit(
+						*hit = RayHit(
 							ray,
 							t,
 							intersection,
 							texcoord,
-							normal,
+							this->normals[facein],
+							this->tangents[facein],
+							this->binormals[facein],
 							this);
 					}
 
