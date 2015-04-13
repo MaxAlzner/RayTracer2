@@ -15,7 +15,7 @@ namespace RAY_NAMESPACE
 			{
 				float n_dot_l = Math::dot(lighting.light, fragment.normal);
 
-				float diffuse = Math::clamp(n_dot_l, 0.0f, 1.0f);
+				float diffuse = Math::clamp(n_dot_l, 0.1f, 1.0f);
 				
 				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), Color(0.0f));
 			}

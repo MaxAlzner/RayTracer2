@@ -14,7 +14,6 @@ namespace RAY_NAMESPACE
 			~AxisCube() {}
 
 			void build();
-			void dispose();
 
 			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
 

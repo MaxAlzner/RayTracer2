@@ -30,6 +30,7 @@ namespace RAY_NAMESPACE
 		class RAY_API TraceShape;
 		class RAY_API Sphere;
 		class RAY_API AxisCube;
+		class RAY_API OctPartitionShape;
 	}
 
 	namespace Components

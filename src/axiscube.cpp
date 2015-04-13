@@ -11,56 +11,32 @@ namespace RAY_NAMESPACE
 
 		RAY_API void AxisCube::build()
 		{
-			this->vertices = component<vec4>(new vec4[2], 2, 0);
+			this->_size = (sizeof(float) * 8) + (sizeof(float) * 18) + (sizeof(float) * 18) + (sizeof(float) * 18);
+			this->_buffer = malloc(this->_size);
+			this->vertices = component<vec4>((vec4*)this->_buffer, 2, 0);
 			this->vertices[0] = vec4(-1.0f, -1.0f, -1.0f, 1.0f);
 			this->vertices[1] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-			this->normals = component<vec3>(new vec3[6], 6, 0);
+			this->normals = component<vec3>((vec3*)(((float*)this->_buffer) + 8), 6, 0);
 			this->normals[0] = vec3(-1.0f, 0.0f, 0.0f);
 			this->normals[1] = vec3(0.0f, -1.0f, 0.0f);
 			this->normals[2] = vec3(0.0f, 0.0f, -1.0f);
 			this->normals[3] = vec3(1.0f, 0.0f, 0.0f);
 			this->normals[4] = vec3(0.0f, 1.0f, 0.0f);
 			this->normals[5] = vec3(0.0f, 0.0f, 1.0f);
-			this->tangents = component<vec3>(new vec3[6], 6, 0);
+			this->tangents = component<vec3>((vec3*)(((float*)this->_buffer) + 26), 6, 0);
 			this->tangents[0] = vec3(0.0f, 0.0f, -1.0f);
 			this->tangents[1] = vec3(1.0f, 0.0f, 0.0f);
 			this->tangents[2] = vec3(1.0f, 0.0f, 0.0f);
 			this->tangents[3] = vec3(0.0f, 0.0f, 1.0f);
 			this->tangents[4] = vec3(1.0f, 0.0f, 0.0f);
 			this->tangents[5] = vec3(1.0f, 0.0f, 0.0f);
-			this->binormals = component<vec3>(new vec3[6], 6, 0);
+			this->binormals = component<vec3>((vec3*)(((float*)this->_buffer) + 44), 6, 0);
 			this->binormals[0] = vec3(0.0f, -1.0f, 0.0f);
 			this->binormals[1] = vec3(0.0f, 0.0f, -1.0f);
 			this->binormals[2] = vec3(0.0f, -1.0f, 0.0f);
 			this->binormals[3] = vec3(0.0f, 1.0f, 0.0f);
 			this->binormals[4] = vec3(0.0f, 0.0f, 1.0f);
 			this->binormals[5] = vec3(0.0f, 1.0f, 0.0f);
-		}
-		RAY_API void AxisCube::dispose()
-		{
-			if (this->vertices.buffer != 0)
-			{
-				delete[] this->vertices.buffer;
-				this->vertices = component<vec4>();
-			}
-
-			if (this->normals.buffer != 0)
-			{
-				delete[] this->normals.buffer;
-				this->normals = component<vec3>();
-			}
-
-			if (this->tangents.buffer != 0)
-			{
-				delete[] this->tangents.buffer;
-				this->tangents = component<vec3>();
-			}
-
-			if (this->binormals.buffer != 0)
-			{
-				delete[] this->binormals.buffer;
-				this->binormals = component<vec3>();
-			}
 		}
 
 		RAY_API bool AxisCube::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
@@ -83,57 +59,22 @@ namespace RAY_NAMESPACE
 				Math::swap(p0.z, p1.z);
 			}
 
-			float txmin, tymin, tzmin, txmax, tymax, tzmax;
-
 			float a = 1.0f / ray.direction.x;
-			if (a >= 0.0f)
-			{
-				txmin = (p0.x - ray.origin.x) * a;
-				txmax = (p1.x - ray.origin.x) * a;
-			}
-			else
-			{
-				txmin = (p1.x - ray.origin.x) * a;
-				txmax = (p0.x - ray.origin.x) * a;
-			}
-
 			float b = 1.0f / ray.direction.y;
-			if (b >= 0.0f)
-			{
-				tymin = (p0.y - ray.origin.y) * b;
-				tymax = (p1.y - ray.origin.y) * b;
-			}
-			else
-			{
-				tymin = (p1.y - ray.origin.y) * b;
-				tymax = (p0.y - ray.origin.y) * b;
-			}
-
 			float c = 1.0f / ray.direction.z;
-			if (c >= 0.0f)
-			{
-				tzmin = (p0.z - ray.origin.z) * c;
-				tzmax = (p1.z - ray.origin.z) * c;
-			}
-			else
-			{
-				tzmin = (p1.z - ray.origin.z) * c;
-				tzmax = (p0.z - ray.origin.z) * c;
-			}
 
-			float t0, t1;
-			int facein, faceout;
+			float txmin = a >= 0.0f ? (p0.x - ray.origin.x) * a : (p1.x - ray.origin.x) * a;
+			float tymin = b >= 0.0f ? (p0.y - ray.origin.y) * b : (p1.y - ray.origin.y) * b;
+			float tzmin = c >= 0.0f ? (p0.z - ray.origin.z) * c : (p1.z - ray.origin.z) * c;
+			float txmax = a >= 0.0f ? (p1.x - ray.origin.x) * a : (p0.x - ray.origin.x) * a;
+			float tymax = b >= 0.0f ? (p1.y - ray.origin.y) * b : (p0.y - ray.origin.y) * b;
+			float tzmax = c >= 0.0f ? (p1.z - ray.origin.z) * c : (p0.z - ray.origin.z) * c;
 
-			if (txmin > tymin)
-			{
-				t0 = txmin;
-				facein = (a >= 0.0f) ? 0 : 3;
-			}
-			else
-			{
-				t0 = tymin;
-				facein = (b >= 0.0f) ? 1 : 4;
-			}
+			float t0 = txmin > tymin ? txmin : tymin;
+			float t1 = txmax < tymax ? txmax : tymax;
+
+			int facein = txmin > tymin ? ((a >= 0.0f) ? 0 : 3) : ((b >= 0.0f) ? 1 : 4);
+			int faceout = txmax < tymax ? ((a >= 0.0f) ? 3 : 0) : ((b >= 0.0f) ? 4 : 1);
 
 			if (tzmin > t0)
 			{
@@ -141,24 +82,11 @@ namespace RAY_NAMESPACE
 				facein = (c >= 0.0f) ? 2 : 5;
 			}
 
-
-			if (txmax < tymax)
-			{
-				t1 = txmax;
-				faceout = (a >= 0.0f) ? 3 : 0;
-			}
-			else
-			{
-				t1 = tymax;
-				faceout = (b >= 0.0f) ? 4 : 1;
-			}
-
 			if (tzmax < t1)
 			{
 				t1 = tzmax;
 				faceout = (c >= 0.0f) ? 5 : 2;
 			}
-
 
 			float kEpsilon = 1.0f;
 			if (t0 < t1 && t1 > kEpsilon)

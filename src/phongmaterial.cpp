@@ -22,7 +22,7 @@ namespace RAY_NAMESPACE
 
 				float phong = Math::clamp(pow(r_dot_v, this->exponent), 0.0f, 1.0f);
 
-				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), Color(phong * lighting.attenuation * fragment.specular));
+				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), Color(phong * diffuse * lighting.attenuation * fragment.specular));
 			}
 
 		}

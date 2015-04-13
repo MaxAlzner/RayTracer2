@@ -112,6 +112,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClCompile Include="src\lumination.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\octpartitionshape.cpp" />
     <ClCompile Include="src\phongmaterial.cpp" />
     <ClCompile Include="src\photo.cpp" />
     <ClCompile Include="src\photoemitter.cpp" />
@@ -119,7 +120,6 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClCompile Include="src\sphere.cpp" />
     <ClCompile Include="src\fragment.cpp" />
     <ClCompile Include="src\texturefilter.cpp" />
-    <ClCompile Include="src\traceshape.cpp" />
     <ClCompile Include="src\tracestack.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
@@ -139,6 +139,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClInclude Include="include\components\materials\material.h" />
     <ClInclude Include="include\dataobjects\rayhit.h" />
     <ClInclude Include="include\shapes\axiscube.h" />
+    <ClInclude Include="include\shapes\octpartitionshape.h" />
     <ClInclude Include="include\shapes\sphere.h" />
     <ClInclude Include="include\RayTracer.h" />
     <ClInclude Include="include\RayTracer_setup.h" />

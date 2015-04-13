@@ -15,6 +15,7 @@ using namespace cb::Object;
 #include "shapes\traceshape.h"
 #include "shapes\sphere.h"
 #include "shapes\axiscube.h"
+#include "shapes\octpartitionshape.h"
 
 #include "components\component.h"
 #include "components\transform.h"

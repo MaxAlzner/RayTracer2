@@ -13,7 +13,7 @@ namespace RAY_NAMESPACE
 			TraceShape() : Shape() {}
 			~TraceShape() {}
 
-			virtual bool hitByRay(const ray& ray, const Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
+			virtual bool hitByRay(const ray& ray, const Mesh::transformation<float>& trans, DataObjects::RayHit* hit) = 0;
 
 		};
 

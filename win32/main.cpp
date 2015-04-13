@@ -60,7 +60,7 @@ Entity* Camera(vec3 position, vec3 rotation, vec2 aperture, float focalDepth)
 	return entity;
 }
 
-Entity* Cube(vec3 position, float scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+Entity* StaticCube(vec3 position, float scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
 {
 	Entity* entity = Build(position, vec3(0.0f), vec3(scale), material, color, normal, specular);
 	TraceShape* cube = new Shapes::AxisCube;
@@ -70,7 +70,7 @@ Entity* Cube(vec3 position, float scale, Materials::Material* material, Surface*
 	return entity;
 }
 
-Entity* Sphere(vec3 position, float radius, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+Entity* StaticSphere(vec3 position, float radius, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
 {
 	Entity* entity = Build(position, vec3(0.0f), vec3(1.0f), material, color, normal, specular);
 	TraceShape* sphere = new Shapes::Sphere(radius);
@@ -105,12 +105,12 @@ int main(int argc, char** argv)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		TraceShape* shape = new TraceShape;
+		OctPartitionShape* shape = new OctPartitionShape;
 		shape->build();
 		shapes.add(shape);
 	}
 
-	Shape::ReadWavefront(shapes[0], "data\\healing_crystal.obj");
+	Shape::ReadWavefront(shapes[0], "data\\puzzle.obj");
 
 	for (int i = 0; i < textures.capacity(); i++)
 	{
@@ -129,62 +129,65 @@ int main(int argc, char** argv)
 	Surface::ReadBitmap(textures[7], "data\\dungeon_wall_dirt_normal.bmp");
 	Surface::ReadBitmap(textures[8], "data\\dungeon_wall_dirt_spec.bmp");
 
-	photo = new Photo(400, 300);
+	photo = new Photo(800, 600);
 	photo->build();
 	stack = new TraceStack;
 	stack->build();
 
-	Entity* camera = Camera(vec3(0.0f, 1.0f, 0.0f), vec3(-10.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
+	Entity* camera = Camera(vec3(0.0f, 2.4f, 0.0f), vec3(-20.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
 
-	//Cube(
-	//	vec3(0.0f, 1.2f, -3.2f), 2.0f,
-	//	//new Materials::PhongMaterial,
-	//	new Materials::CookTorranceMaterial(0.8f, 1.4f),
-	//	textures[3],
-	//	textures[4],
-	//	textures[5]
-	//	);
-	//Cube(
-	//	vec3(-4.0f, 0.1f, -1.8f), 1.4f,
-	//	new Materials::PhongMaterial,
-	//	//new Materials::DiffuseMaterial,
-	//	textures[0],
-	//	textures[1],
-	//	textures[2]
-	//	);
-	//Sphere(
-	//	vec3(-3.2f, -2.0f, 0.0f), 2.1f,
-	//	//new Materials::BlinnMaterial(64.0f),
-	//	new Materials::CookTorranceMaterial(0.8f, 1.4f),
-	//	textures[6],
-	//	textures[7],
-	//	textures[8]
-	//	);
-	//Sphere(
-	//	vec3(-1.0f, 0.5f, 0.0f), 0.4f,
-	//	new Materials::BlinnMaterial,
-	//	//new Materials::DiffuseMaterial,
-	//	textures[0],
-	//	textures[1],
-	//	textures[2]
-	//	);
-
-	StaticMesh(
-		vec3(0.0f, 1.0f, -1.6f),
-		vec3(0.0f, 0.0f, 0.0f),
-		vec3(3.0f),
-		shapes[0],
-		new Materials::PhongMaterial,
+	StaticCube(
+		vec3(0.0f, 1.2f, -3.2f), 2.0f,
+		//new Materials::PhongMaterial,
+		new Materials::CookTorranceMaterial(0.1f, 1.5f),
 		textures[3],
 		textures[4],
 		textures[5]
 		);
+	StaticCube(
+		vec3(-4.0f, 0.1f, -1.8f), 1.4f,
+		new Materials::PhongMaterial,
+		//new Materials::DiffuseMaterial,
+		textures[0],
+		textures[1],
+		textures[2]
+		);
+	StaticSphere(
+		vec3(-3.2f, -2.0f, 0.0f), 2.1f,
+		//new Materials::BlinnMaterial(64.0f),
+		new Materials::CookTorranceMaterial(0.1f, 1.1f),
+		textures[3],
+		textures[4],
+		textures[5]
+		);
+	StaticSphere(
+		vec3(-1.0f, 0.5f, 0.0f), 0.4f,
+		new Materials::BlinnMaterial,
+		//new Materials::DiffuseMaterial,
+		textures[0],
+		textures[1],
+		textures[2]
+		);
 
-	DirectionalLight(vec3(-20.0f, 140.0f, 0.0f), 1.0f);
+#if 0
+	StaticMesh(
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(5.0f),
+		shapes[0],
+		new Materials::CookTorranceMaterial(0.8f, 1.1f),
+		textures[3],
+		textures[4],
+		textures[5]
+		);
+#endif
+
+	//DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
 	//PointLight(vec3(-2.0f, 0.2f, 2.0f), 1.0f);
 	//PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
+	PointLight(vec3(-2.0f, 0.2f, 6.0f), 1.0f);
 
-	const int frames = 20;
+	const int frames = 8;
 	for (int i = 0; i < frames; i++)
 	{
 		float k = float(i) / float(frames);

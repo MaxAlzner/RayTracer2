@@ -31,12 +31,13 @@ namespace RAY_NAMESPACE
 				float m = this->roughness * this->roughness;
 				float r = (1.0f / (m * pow(n_dot_h, 4.0f))) * exp((pow(n_dot_h, 2.0f) - 1.0f) / (m * pow(n_dot_h, 2.0f)));
 				float f = (this->refractionIndex + pow(1.0f - h_dot_v, 5.0f)) * (1.0f - this->refractionIndex);
-				float brdf = Math::max((abs(f * r * g) / n_dot_v), 0.0f);
+				float brdf = Math::clamp((abs(f * r * g) / n_dot_v), 0.0f, 1.0f);
 
 				return Lumination(fragment.color * Color(
 					diffuse * lighting.attenuation
 					), Color(
-					brdf * lighting.attenuation/* * surface.specular*/
+					//brdf * lighting.attenuation/* * surface.specular*/
+					brdf * diffuse
 					));
 			}
 
