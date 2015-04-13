@@ -28,14 +28,14 @@ namespace RAY_NAMESPACE
 
 				return vec3(0.0f, 0.0f, 1.0f);
 			}
-			inline RAY_API float Material::specularIntensity(const vec2& texcoord) const
+			inline RAY_API Color Material::specularIntensity(const vec2& texcoord) const
 			{
 				if (this->specular != 0)
 				{
-					return this->specular->sample(texcoord).r;
+					return this->specular->sample(texcoord);
 				}
 
-				return 1.0f;
+				return Color(0.0f);
 			}
 
 		}

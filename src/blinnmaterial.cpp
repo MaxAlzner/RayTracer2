@@ -22,7 +22,7 @@ namespace RAY_NAMESPACE
 
 				float blinn = Math::clamp(pow(h_dot_v, this->exponent), 0.0f, 1.0f);
 
-				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), Color(blinn * diffuse * lighting.attenuation * fragment.specular));
+				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), fragment.specular * Color(blinn * diffuse * lighting.attenuation));
 			}
 
 		}

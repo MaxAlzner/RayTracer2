@@ -33,12 +33,7 @@ namespace RAY_NAMESPACE
 				float f = (this->refractionIndex + pow(1.0f - h_dot_v, 5.0f)) * (1.0f - this->refractionIndex);
 				float brdf = Math::clamp((abs(f * r * g) / n_dot_v), 0.0f, 1.0f);
 
-				return Lumination(fragment.color * Color(
-					diffuse * lighting.attenuation
-					), Color(
-					//brdf * lighting.attenuation/* * surface.specular*/
-					brdf * diffuse
-					));
+				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), fragment.specular * Color(brdf * diffuse * lighting.attenuation));
 			}
 
 		}

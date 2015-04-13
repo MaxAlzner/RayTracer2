@@ -24,7 +24,7 @@ namespace RAY_NAMESPACE
 				float d = Math::magnitude(l);
 				l = Math::normalize(l);
 
-				float atten = this->intensity / float(this->object->stack->lights.count());
+				float atten = Math::min(this->intensity / d, 1.0f);
 
 				Lighting data(l, this->occluded(fragment) ? 0.1f : atten);
 

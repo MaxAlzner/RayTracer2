@@ -17,9 +17,9 @@ namespace RAY_NAMESPACE
 				tangent(1.0f, 0.0f, 0.0f),
 				binormal(0.0f, 1.0f, 0.0f),
 				view(0.0f, 0.0f, 1.0f),
-				specular(0.0f),
 				transparency(1.0f),
 				color(1.0f),
+				specular(0.0f),
 				material(0) {}
 			inline Fragment(
 				const RayHit& hit,
@@ -31,9 +31,9 @@ namespace RAY_NAMESPACE
 				tangent(hit.tangent),
 				binormal(hit.binormal),
 				view(0.0f, 0.0f, 1.0f),
-				specular(0.0f),
 				transparency(1.0f),
 				color(1.0f),
+				specular(0.0f),
 				material(material)
 			{
 				this->adjust(hit);
@@ -50,9 +50,9 @@ namespace RAY_NAMESPACE
 			vec3 tangent;
 			vec3 binormal;
 			vec3 view;
-			float specular;
 			float transparency;
 			Color color;
+			Color specular;
 			const Components::Materials::Material* material;
 
 		};

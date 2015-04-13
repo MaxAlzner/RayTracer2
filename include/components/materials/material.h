@@ -23,7 +23,7 @@ namespace RAY_NAMESPACE
 
 				virtual inline Color surfaceColor(const vec2& texcoord) const;
 				virtual inline vec3 surfaceNormal(const vec2& texcoord) const;
-				virtual inline float specularIntensity(const vec2& texcoord) const;
+				virtual inline Color specularIntensity(const vec2& texcoord) const;
 
 				TextureFilter* color;
 				TextureFilter* normal;

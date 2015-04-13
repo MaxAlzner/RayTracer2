@@ -148,17 +148,17 @@ int main(int argc, char** argv)
 		vec3(-4.0f, 0.1f, -1.8f), 1.4f,
 		new Materials::PhongMaterial,
 		//new Materials::DiffuseMaterial,
-		textures[0],
-		textures[1],
-		textures[2]
-		);
-	StaticSphere(
-		vec3(-3.2f, -2.0f, 0.0f), 2.1f,
-		//new Materials::BlinnMaterial(64.0f),
-		new Materials::CookTorranceMaterial(0.1f, 1.1f),
 		textures[3],
 		textures[4],
 		textures[5]
+		);
+	StaticSphere(
+		vec3(-3.2f, -2.0f, 0.0f), 2.1f,
+		new Materials::PhongMaterial(24.0f),
+		//new Materials::CookTorranceMaterial(0.1f, 1.1f),
+		textures[6],
+		textures[7],
+		textures[8]
 		);
 	StaticSphere(
 		vec3(-1.0f, 0.5f, 0.0f), 0.4f,
@@ -182,15 +182,15 @@ int main(int argc, char** argv)
 		);
 #endif
 
-	//DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
-	//PointLight(vec3(-2.0f, 0.2f, 2.0f), 1.0f);
-	//PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
-	PointLight(vec3(-2.0f, 0.2f, 6.0f), 1.0f);
+	DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
+	PointLight(vec3(-6.4f, 0.2f, -0.8f), 1.0f);
+	PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
+	PointLight(vec3(-2.0f, 0.2f, 0.0f), 8.0f);
 
 	const int frames = 8;
 	for (int i = 0; i < frames; i++)
 	{
-		float k = float(i) / float(frames);
+		float k = float(i) / float(frames * 2);
 		float theta = k * Math::pi() * 2.0f;
 		float u = cos(theta);
 		float v = sin(theta);
