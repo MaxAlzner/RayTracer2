@@ -18,8 +18,8 @@ namespace RAY_NAMESPACE
 
 			bool isEmpty() const;
 
-			Entity* trace(const ray& ray, DataObjects::RayHit* hit);
-			DataObjects::Lumination albedo(const DataObjects::Fragment& fragment);
+			DataObjects::Fragment trace(const ray& ray, DataObjects::RayHit* hit);
+			DataObjects::Lumination albedo(const TracePath& path);
 
 			void add(Entity* entity);
 

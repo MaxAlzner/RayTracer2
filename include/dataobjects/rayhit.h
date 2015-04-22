@@ -19,7 +19,7 @@ namespace RAY_NAMESPACE
 				binormal(0.0f, 1.0f, 0.0f),
 				shape(0) {}
 			inline RayHit(
-				const ray& ray,
+				const ray& r,
 				const float distance,
 				const vec3& intersection,
 				const vec2& texcoord,
@@ -28,7 +28,7 @@ namespace RAY_NAMESPACE
 				const vec3& binormal,
 				const Shapes::TraceShape* shape
 				) :
-				ray(ray),
+				ray(r),
 				distance(distance),
 				intersection(intersection),
 				texcoord(texcoord),

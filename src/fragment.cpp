@@ -12,7 +12,10 @@ namespace RAY_NAMESPACE
 			if (this->material != 0)
 			{
 				this->color = this->material->surfaceColor(this->texcoord);
-				this->specular = this->material->specularIntensity(this->texcoord);
+				this->specular = this->material->surfaceSpecular(this->texcoord);
+				this->transparency = this->material->surfaceTransparency(this->texcoord);
+				this->reflectivity = this->material->surfaceReflectivity(this->texcoord);
+				this->emissive = this->material->surfaceEmissive(this->texcoord);
 			}
 		}
 		inline RAY_API void Fragment::adjust(const RayHit& hit)
@@ -26,10 +29,15 @@ namespace RAY_NAMESPACE
 				vec3 surfaceNormal = this->material->surfaceNormal(this->texcoord);
 				mat3 space(hit.tangent, hit.binormal, hit.normal);
 
-				this->normal = Math::normalize(surfaceNormal * space);
+				this->normal = Math::normalize(space * surfaceNormal);
 				this->tangent = Math::cross(-hit.binormal, this->normal);
 				this->binormal = Math::cross(this->tangent, this->normal);
 			}
+		}
+
+		inline RAY_API ray Fragment::reflect(const ray& r)
+		{
+			return ray(this->position, Math::reflect(-r.direction, this->normal));
 		}
 
 	}

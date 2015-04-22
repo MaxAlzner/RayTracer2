@@ -37,9 +37,10 @@ namespace RAY_NAMESPACE
 			return this->stack.count() < 1;
 		}
 
-		RAY_API Entity* TraceStack::trace(const ray& ray, RayHit* hit)
+		RAY_API Fragment TraceStack::trace(const ray& ray, RayHit* hit)
 		{
 			float cutoff = FLT_MAX;
+			RayHit nearestHit;
 			Entity* nearest = 0;
 			for (Iterator<Entity*> i = this->stack.iterator(); i.inside(); i.next())
 			{
@@ -52,6 +53,7 @@ namespace RAY_NAMESPACE
 					if (entity->meshfilter->shape->hitByRay(ray, transform, &test) && test.distance < cutoff)
 					{
 						cutoff = test.distance;
+						nearestHit = test;
 						nearest = entity;
 						if (hit != 0)
 						{
@@ -61,15 +63,26 @@ namespace RAY_NAMESPACE
 				}
 			}
 
-			return nearest;
+			return nearest != 0 ?
+				Fragment(nearestHit, nearest->material) :
+				Fragment();
 		}
-		RAY_API Lumination TraceStack::albedo(const Fragment& fragment)
+		RAY_API Lumination TraceStack::albedo(const TracePath& path)
 		{
 			Lumination albedo;
 			for (Iterator<Light*> i = this->lights.iterator(); i.inside(); i.next())
 			{
 				Light* light = i.current();
-				albedo += light->luminance(fragment);
+				Lumination lumin = light->luminance(path._fragment);
+
+				TracePath* current = path._reflection;
+				while (current != 0 && current->_fragment.material != 0)
+				{
+					lumin += (Lumination(1.0f, 1.0f) - lumin) * light->luminance(current->_fragment) * current->_fragment.reflectivity;
+					current = current->_reflection;
+				}
+
+				albedo += lumin;
 			}
 
 			return albedo;

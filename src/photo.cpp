@@ -17,8 +17,11 @@ namespace RAY_NAMESPACE
 
 		RAY_API void Photo::build()
 		{
-			this->_geometrypass = Map<RayHit>(this->_width, this->_height, this->reflectDepth);
-			this->_fragmentpass = Map<Fragment>(this->_width, this->_height, this->reflectDepth);
+			this->reflectDepth = Math::max(this->reflectDepth, 0);
+			this->multiSampleDepth = Math::max(this->multiSampleDepth, 0);
+			//this->_geometrypass = Map<RayHit>(this->_width, this->_height, this->reflectDepth + 1);
+			//this->_fragmentpass = Map<Fragment>(this->_width, this->_height, this->reflectDepth + 1);
+			this->_geometrypass = Map<TracePath>(this->_width, this->_height);
 			this->_lightpass = Map<Lumination>(this->_width, this->_height);
 		}
 		RAY_API void Photo::dispose()
@@ -44,15 +47,14 @@ namespace RAY_NAMESPACE
 				for (int k = 0; k < this->_width; k++)
 				{
 					Lumination luminance = this->_lightpass.get(k, i);
-					Fragment fragment = this->_fragmentpass.get(k, i);
+					//Fragment fragment = this->_fragmentpass.get(k, i);
 
 					Color color = luminance.diffuse + luminance.specular;
-					color.a = 1.0f;
 
 					//color = Color(fragment.texcoord.x, fragment.texcoord.y, 0.0f, 1.0f);
 					//color = luminance.specular;
 
-					//surface->put(k, this->_height - (i + 1), hit.shape != 0 ? EncodeColor(color, surface->format()) : (EncodedPixel)0xFF000000);
+					color.a = 1.0f;
 					surface->put(k, this->_height - (i + 1), EncodeColor(color, surface->format()));
 				}
 			}
@@ -65,7 +67,6 @@ namespace RAY_NAMESPACE
 			if (stack != 0 && stack->camera != 0)
 			{
 				this->_geometrypass.zero();
-				this->_fragmentpass.zero();
 				this->_lightpass.zero();
 				for (Iterator<Entity*> i = stack->stack.iterator(); i.inside(); i.next())
 				{

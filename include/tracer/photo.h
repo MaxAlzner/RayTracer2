@@ -13,13 +13,23 @@ namespace RAY_NAMESPACE
 			friend class PhotoEmitter;
 
 			inline Photo() :
-				reflectDepth(1),
-				multiSampleDepth(1),
+				reflectDepth(0),
+				multiSampleDepth(0),
 				_width(0),
 				_height(0) {}
 			inline Photo(int width, int height) :
-				reflectDepth(1),
-				multiSampleDepth(1),
+				reflectDepth(0),
+				multiSampleDepth(0),
+				_width(width),
+				_height(height) {}
+			inline Photo(int width, int height, int reflectDepth) :
+				reflectDepth(reflectDepth),
+				multiSampleDepth(0),
+				_width(width),
+				_height(height) {}
+			inline Photo(int width, int height, int reflectDepth, int multiSampleDepth) :
+				reflectDepth(reflectDepth),
+				multiSampleDepth(multiSampleDepth),
 				_width(width),
 				_height(height) {}
 			inline ~Photo() {}
@@ -42,8 +52,7 @@ namespace RAY_NAMESPACE
 
 			int _width;
 			int _height;
-			Collection::Map<DataObjects::RayHit> _geometrypass;
-			Collection::Map<DataObjects::Fragment> _fragmentpass;
+			Collection::Map<TracePath> _geometrypass;
 			Collection::Map<DataObjects::Lumination> _lightpass;
 
 		};

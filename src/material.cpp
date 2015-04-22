@@ -28,11 +28,40 @@ namespace RAY_NAMESPACE
 
 				return vec3(0.0f, 0.0f, 1.0f);
 			}
-			inline RAY_API Color Material::specularIntensity(const vec2& texcoord) const
+			inline RAY_API Color Material::surfaceSpecular(const vec2& texcoord) const
 			{
 				if (this->specular != 0)
 				{
 					return this->specular->sample(texcoord);
+				}
+
+				return Color(1.0f);
+			}
+			inline RAY_API float Material::surfaceTransparency(const vec2& texcoord) const
+			{
+				if (this->transparency != 0)
+				{
+					Color sample = this->transparency->sample(texcoord);
+					return (sample.r + sample.g + sample.b) / 3.0f;
+				}
+
+				return 0.0f;
+			}
+			inline RAY_API float Material::surfaceReflectivity(const vec2& texcoord) const
+			{
+				if (this->reflect != 0)
+				{
+					Color sample = this->reflect->sample(texcoord);
+					return (sample.r + sample.g + sample.b) / 3.0f;
+				}
+
+				return 1.0f;
+			}
+			inline RAY_API Color Material::surfaceEmissive(const vec2& texcoord) const
+			{
+				if (this->emissive != 0)
+				{
+					return this->emissive->sample(texcoord);
 				}
 
 				return Color(0.0f);

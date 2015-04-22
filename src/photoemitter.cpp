@@ -16,16 +16,34 @@ namespace RAY_NAMESPACE
 				{
 					for (int k = this->_area.p0.x; k < this->_area.p1.x; k++)
 					{
-						ray ray = this->_stack->camera->getRay(float(k) / float(this->_photo->_width), float(i) / float(this->_photo->_height));
+						ray r = this->_stack->camera->getRay(float(k) / float(this->_photo->_width), float(i) / float(this->_photo->_height));
 						RayHit hit;
-						Entity* nearest = this->_stack->trace(ray, &hit);
+						Fragment frag = this->_stack->trace(r, &hit);
 
-						if (nearest != 0)
+						if (frag.material != 0)
 						{
-							Fragment data(hit, nearest->material);
-							this->_photo->_geometrypass.get(k, i) = hit;
-							this->_photo->_fragmentpass.get(k, i) = data;
-							this->_photo->_lightpass.get(k, i) = this->_stack->albedo(data);
+							TracePath* path = &this->_photo->_geometrypass.get(k, i);
+							*path = frag;
+
+							TracePath* current = path;
+							ray lastRay = r;
+							for (int n = 1; n <= this->_photo->reflectDepth; n++)
+							{
+								current->_reflection = new TracePath;
+								current->_depth = n;
+								ray reflectedRay = current->_fragment.reflect(lastRay);
+								Fragment reflection = this->_stack->trace(reflectedRay, 0);
+								*(current->_reflection) = reflection;
+								if (reflection.material == 0)
+								{
+									break;
+								}
+
+								current = current->_reflection;
+								lastRay = reflectedRay;
+							}
+
+							this->_photo->_lightpass.get(k, i) = this->_stack->albedo(*path);
 						}
 					}
 				}

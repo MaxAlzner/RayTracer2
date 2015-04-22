@@ -23,21 +23,21 @@ namespace RAY_NAMESPACE
 				vec3 l = this->object->transform->forward * -1.0f;
 				float atten = this->intensity / float(this->object->stack->lights.count());
 
-				Lighting data(l, this->occluded(fragment) ? 0.1f : atten);
+				Lighting data(l, this->occlusion(fragment) * atten);
 
 				return fragment.material->shade(data, fragment);
 			}
 
-			inline RAY_API bool DirectionalLight::occluded(const Fragment& fragment)
+			inline RAY_API float DirectionalLight::occlusion(const Fragment& fragment)
 			{
 				if (fragment.material != 0)
 				{
 					ray to(fragment.position, this->object->transform->forward * -1.0f);
-					Entity* occluder = this->object->stack->trace(to, 0);
-					return occluder != 0 && occluder != fragment.material->object;
+					Fragment occluded = this->object->stack->trace(to, 0);
+					return occluded.material != 0 && occluded.material != fragment.material ? 0.0f : 1.0f;
 				}
 
-				return false;
+				return 0.0f;
 			}
 
 		}

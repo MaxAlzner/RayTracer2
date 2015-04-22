@@ -33,8 +33,11 @@ using namespace cb::Object;
 #include "components\lights\light.h"
 #include "components\lights\pointlight.h"
 #include "components\lights\directionallight.h"
+#include "components\lights\spotlight.h"
+#include "components\lights\arealight.h"
 
 #include "tracer\entity.h"
 #include "tracer\tracestack.h"
+#include "tracer\tracepath.h"
 #include "tracer\photo.h"
 #include "tracer\photoemitter.h"

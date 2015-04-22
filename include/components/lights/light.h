@@ -22,7 +22,7 @@ namespace RAY_NAMESPACE
 
 				virtual inline DataObjects::Lumination luminance(const DataObjects::Fragment& fragment) = 0;
 
-				virtual inline bool occluded(const DataObjects::Fragment& fragment) = 0;
+				virtual inline float occlusion(const DataObjects::Fragment& fragment) = 0;
 
 				float intensity;
 

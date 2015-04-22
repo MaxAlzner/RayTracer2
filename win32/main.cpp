@@ -101,6 +101,20 @@ Entity* DirectionalLight(vec3 rotation, float intensity)
 	return entity;
 }
 
+Entity* SpotLight(vec3 position, vec3 rotation, float angle, float intensity)
+{
+	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
+	entity->add(new Lights::SpotLight(angle, intensity));
+	return entity;
+}
+
+Entity* AreaLight(vec3 position, vec3 rotation, vec2 area, float intensity)
+{
+	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
+	entity->add(new Lights::AreaLight(area, intensity));
+	return entity;
+}
+
 int main(int argc, char** argv)
 {
 	for (int i = 0; i < 8; i++)
@@ -110,7 +124,7 @@ int main(int argc, char** argv)
 		shapes.add(shape);
 	}
 
-	Shape::ReadWavefront(shapes[0], "data\\puzzle.obj");
+	Shape::ReadWavefront(shapes[0], "data\\plane.obj");
 
 	for (int i = 0; i < textures.capacity(); i++)
 	{
@@ -129,68 +143,70 @@ int main(int argc, char** argv)
 	Surface::ReadBitmap(textures[7], "data\\dungeon_wall_dirt_normal.bmp");
 	Surface::ReadBitmap(textures[8], "data\\dungeon_wall_dirt_spec.bmp");
 
-	photo = new Photo(800, 600);
+	photo = new Photo(800, 600, 1);
 	photo->build();
 	stack = new TraceStack;
 	stack->build();
 
-	Entity* camera = Camera(vec3(0.0f, 2.4f, 0.0f), vec3(-20.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
+	Entity* camera = Camera(vec3(0.0f, 3.6f, 0.0f), vec3(-20.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
 
+#if 1
 	StaticCube(
 		vec3(0.0f, 1.2f, -3.2f), 2.0f,
-		//new Materials::PhongMaterial,
 		new Materials::CookTorranceMaterial(0.1f, 1.5f),
-		textures[3],
+		0,//textures[3],
 		textures[4],
-		textures[5]
+		0//textures[5]
 		);
 	StaticCube(
-		vec3(-4.0f, 0.1f, -1.8f), 1.4f,
-		new Materials::PhongMaterial,
-		//new Materials::DiffuseMaterial,
-		textures[3],
-		textures[4],
-		textures[5]
-		);
-	StaticSphere(
-		vec3(-3.2f, -2.0f, 0.0f), 2.1f,
-		new Materials::PhongMaterial(24.0f),
-		//new Materials::CookTorranceMaterial(0.1f, 1.1f),
-		textures[6],
-		textures[7],
-		textures[8]
-		);
-	StaticSphere(
-		vec3(-1.0f, 0.5f, 0.0f), 0.4f,
-		new Materials::BlinnMaterial,
-		//new Materials::DiffuseMaterial,
-		textures[0],
+		vec3(-4.0f, 1.8f, -1.8f), 1.4f,
+		new Materials::PhongMaterial(32.0f),
+		0,
 		textures[1],
-		textures[2]
+		0
 		);
+	StaticSphere(
+		vec3(-3.2f, -1.0f, 0.0f), 2.1f,
+		new Materials::PhongMaterial(24.0f),
+		0,
+		0,
+		0
+		);
+	StaticSphere(
+		vec3(-1.0f, 0.8f, 0.0f), 0.4f,
+		new Materials::BlinnMaterial(24.0f),
+		0,
+		0,
+		0
+		);
+#endif
 
 #if 0
 	StaticMesh(
 		vec3(0.0f, 0.0f, 0.0f),
-		vec3(0.0f, 0.0f, 0.0f),
-		vec3(5.0f),
+		vec3(90.0f, 0.0f, 0.0f),
+		vec3(32.0f),
 		shapes[0],
-		new Materials::CookTorranceMaterial(0.8f, 1.1f),
+		new Materials::BlinnMaterial,
 		textures[3],
 		textures[4],
 		textures[5]
 		);
 #endif
 
-	DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
-	PointLight(vec3(-6.4f, 0.2f, -0.8f), 1.0f);
-	PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
-	PointLight(vec3(-2.0f, 0.2f, 0.0f), 8.0f);
+	StaticCube(vec3(0.0f, -32.0f, 0.0f), 32.0f, new Materials::BlinnMaterial, textures[3], textures[4], textures[5]);
+
+	//DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
+	//PointLight(vec3(-6.4f, 0.2f, -0.8f), 1.0f);
+	//PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
+	//PointLight(vec3(-2.0f, 0.2f, 0.0f), 8.0f);
+	SpotLight(vec3(6.0f, 6.4f, -2.0f), vec3(40.0f, 260.0f, 0.0f), 60.0f, 2.4f);
+	SpotLight(vec3(0.0f, 8.0f, 4.0f), vec3(60.0f, 0.0f, 0.0f), 80.0f, 4.0f);
 
 	const int frames = 8;
 	for (int i = 0; i < frames; i++)
 	{
-		float k = float(i) / float(frames * 2);
+		float k = float(i) / (float(frames) * 1.0f);
 		float theta = k * Math::pi() * 2.0f;
 		float u = cos(theta);
 		float v = sin(theta);

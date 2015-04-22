@@ -102,6 +102,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\arealight.cpp" />
     <ClCompile Include="src\axiscube.cpp" />
     <ClCompile Include="src\blinnmaterial.cpp" />
     <ClCompile Include="src\camera.cpp" />
@@ -119,16 +120,20 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClCompile Include="src\pointlight.cpp" />
     <ClCompile Include="src\sphere.cpp" />
     <ClCompile Include="src\fragment.cpp" />
+    <ClCompile Include="src\spotlight.cpp" />
     <ClCompile Include="src\texturefilter.cpp" />
+    <ClCompile Include="src\tracepath.cpp" />
     <ClCompile Include="src\tracestack.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\components\cameras\camera.h" />
     <ClInclude Include="include\components\component.h" />
+    <ClInclude Include="include\components\lights\arealight.h" />
     <ClInclude Include="include\components\lights\directionallight.h" />
     <ClInclude Include="include\components\lights\light.h" />
     <ClInclude Include="include\components\lights\pointlight.h" />
+    <ClInclude Include="include\components\lights\spotlight.h" />
     <ClInclude Include="include\components\materials\blinnmaterial.h" />
     <ClInclude Include="include\components\materials\cooktorrancematerial.h" />
     <ClInclude Include="include\components\materials\diffusematerial.h" />
@@ -150,6 +155,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClInclude Include="include\tracer\photo.h" />
     <ClInclude Include="include\tracer\photoemitter.h" />
     <ClInclude Include="include\dataobjects\fragment.h" />
+    <ClInclude Include="include\tracer\tracepath.h" />
     <ClInclude Include="include\tracer\tracestack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

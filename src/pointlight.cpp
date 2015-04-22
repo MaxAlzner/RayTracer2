@@ -26,22 +26,22 @@ namespace RAY_NAMESPACE
 
 				float atten = Math::min(this->intensity / d, 1.0f);
 
-				Lighting data(l, this->occluded(fragment) ? 0.1f : atten);
+				Lighting data(l, this->occlusion(fragment) * atten);
 
 				return fragment.material->shade(data, fragment);
 			}
 
-			inline RAY_API bool PointLight::occluded(const Fragment& fragment)
+			inline RAY_API float PointLight::occlusion(const Fragment& fragment)
 			{
 				if (fragment.material != 0)
 				{
 					vec3 toLight = this->object->transform->position - fragment.position;
 					ray to(fragment.position, Math::normalize(toLight), Math::magnitude(toLight));
-					Entity* occluder = this->object->stack->trace(to, 0);
-					return occluder != 0 && occluder != fragment.material->object;
+					Fragment occluded = this->object->stack->trace(to, 0);
+					return occluded.material != 0 && occluded.material != fragment.material ? 0.0f : 1.0f;
 				}
 
-				return false;
+				return 0.0f;
 			}
 
 		}

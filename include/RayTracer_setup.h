@@ -68,6 +68,7 @@ namespace RAY_NAMESPACE
 	{
 		class RAY_API Entity;
 		class RAY_API TraceStack;
+		class RAY_API TracePath;
 		class RAY_API Photo;
 		class RAY_API PhotoEmitter;
 	}
