@@ -15,6 +15,7 @@ namespace RAY_NAMESPACE
 				transform(0),
 				meshfilter(0),
 				material(0),
+				camera(0),
 				light(0) {}
 			inline ~Entity() {}
 

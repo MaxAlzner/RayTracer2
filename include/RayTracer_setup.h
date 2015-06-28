@@ -47,6 +47,7 @@ namespace RAY_NAMESPACE
 			class RAY_API BlinnMaterial;
 			class RAY_API PhongMaterial;
 			class RAY_API CookTorranceMaterial;
+			class RAY_API GlassMaterial;
 		}
 
 		namespace Cameras

@@ -10,7 +10,8 @@ namespace RAY_NAMESPACE
 		{
 		public:
 
-			inline TraceStack() {}
+			inline TraceStack() :
+				camera(0) {}
 			inline ~TraceStack() {}
 
 			void build();

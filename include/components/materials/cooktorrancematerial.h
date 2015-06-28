@@ -20,9 +20,11 @@ namespace RAY_NAMESPACE
 					Material(),
 					roughness(roughness),
 					refractionIndex(refractionIndex) {}
-				inline ~CookTorranceMaterial() {}
+				inline virtual ~CookTorranceMaterial() {}
 
 				inline DataObjects::Lumination shade(const DataObjects::Lighting& lighting, const DataObjects::Fragment& fragment) const;
+
+				inline DataObjects::Lumination reflection(const DataObjects::Lumination& albedo, const DataObjects::Fragment& fragment) const;
 
 				float roughness;
 				float refractionIndex;

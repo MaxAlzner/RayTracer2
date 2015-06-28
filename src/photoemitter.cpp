@@ -10,44 +10,67 @@ namespace RAY_NAMESPACE
 
 		RAY_API void PhotoEmitter::emit()
 		{
+			const int sampleSpan = (int)pow(2.0, this->_photo->multiSampleDepth);
+			const float sampleAtten = 1.0f / float(sampleSpan * sampleSpan);
 			if (this->_photo != 0 && this->_stack != 0)
 			{
 				for (int i = this->_area.p0.y; i < this->_area.p1.y; i++)
 				{
 					for (int k = this->_area.p0.x; k < this->_area.p1.x; k++)
 					{
-						ray r = this->_stack->camera->getRay(float(k) / float(this->_photo->_width), float(i) / float(this->_photo->_height));
-						RayHit hit;
-						Fragment frag = this->_stack->trace(r, &hit);
-
-						if (frag.material != 0)
+						Lumination albedo;
+						for (int n = 0; n < sampleSpan; n++)
 						{
-							TracePath* path = &this->_photo->_geometrypass.get(k, i);
-							*path = frag;
-
-							TracePath* current = path;
-							ray lastRay = r;
-							for (int n = 1; n <= this->_photo->reflectDepth; n++)
+							for (int m = 0; m < sampleSpan; m++)
 							{
-								current->_reflection = new TracePath;
-								current->_depth = n;
-								ray reflectedRay = current->_fragment.reflect(lastRay);
-								Fragment reflection = this->_stack->trace(reflectedRay, 0);
-								*(current->_reflection) = reflection;
-								if (reflection.material == 0)
-								{
-									break;
-								}
-
-								current = current->_reflection;
-								lastRay = reflectedRay;
+								albedo += this->cast(
+									(float(k) + (float(m) / float(sampleSpan))) / float(this->_photo->_width),
+									(float(i) + (float(n) / float(sampleSpan))) / float(this->_photo->_height)
+									) * sampleAtten;
 							}
-
-							this->_photo->_lightpass.get(k, i) = this->_stack->albedo(*path);
 						}
+
+						this->_photo->_lightpass.get(k, i) = albedo;
 					}
 				}
 			}
+		}
+
+		RAY_API Lumination PhotoEmitter::cast(const float u, const float v)
+		{
+			Lumination albedo;
+			ray r = this->_stack->camera->getRay(u, v);
+			RayHit hit;
+			Fragment frag = this->_stack->trace(r, &hit);
+
+			if (frag.material != 0)
+			{
+				TracePath* path = new TracePath;
+				*path = frag;
+
+				TracePath* current = path;
+				ray lastRay = r;
+				for (int n = 1; n <= this->_photo->reflectDepth; n++)
+				{
+					current->_reflection = new TracePath;
+					current->_depth = n;
+					ray reflected = current->_fragment.reflect(lastRay);
+					Fragment reflection = this->_stack->trace(reflected, 0);
+					*(current->_reflection) = reflection;
+					if (reflection.material == 0)
+					{
+						break;
+					}
+
+					current = current->_reflection;
+					lastRay = reflected;
+				}
+
+				albedo = this->_stack->albedo(*path);
+				delete path;
+			}
+
+			return albedo;
 		}
 
 	}

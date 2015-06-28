@@ -18,9 +18,11 @@ namespace RAY_NAMESPACE
 				inline BlinnMaterial(const float exponent) :
 					Material(),
 					exponent(exponent) {}
-				inline ~BlinnMaterial() {}
+				inline virtual ~BlinnMaterial() {}
 
 				inline DataObjects::Lumination shade(const DataObjects::Lighting& lighting, const DataObjects::Fragment& fragment) const;
+
+				inline DataObjects::Lumination reflection(const DataObjects::Lumination& albedo, const DataObjects::Fragment& fragment) const;
 
 				float exponent;
 

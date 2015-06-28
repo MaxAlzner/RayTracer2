@@ -12,7 +12,7 @@ namespace RAY_NAMESPACE
 
 			inline Component() : object(0) {}
 			inline Component(String type) : object(0), type(type) {}
-			inline ~Component() {}
+			inline virtual ~Component() {}
 
 			String type;
 			Tracer::Entity* object;

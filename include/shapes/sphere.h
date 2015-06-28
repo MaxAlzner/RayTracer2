@@ -10,19 +10,14 @@ namespace RAY_NAMESPACE
 		{
 		public:
 
-			Sphere() : TraceShape(), radius(1.0f) {}
-			Sphere(float radius) : TraceShape(), radius(radius) {}
+			Sphere() : TraceShape() {}
 			~Sphere() {}
-
-			void normalize();
 
 			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
 
 			const int elements() const;
 			const int components() const;
 			const void* buffer() const;
-
-			float radius;
 
 		};
 

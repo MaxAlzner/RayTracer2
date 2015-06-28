@@ -110,6 +110,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClCompile Include="src\diffusematerial.cpp" />
     <ClCompile Include="src\directionallight.cpp" />
     <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\glassmaterial.cpp" />
     <ClCompile Include="src\lumination.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\material.cpp" />
@@ -137,6 +138,7 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClInclude Include="include\components\materials\blinnmaterial.h" />
     <ClInclude Include="include\components\materials\cooktorrancematerial.h" />
     <ClInclude Include="include\components\materials\diffusematerial.h" />
+    <ClInclude Include="include\components\materials\glassmaterial.h" />
     <ClInclude Include="include\components\materials\phongmaterial.h" />
     <ClInclude Include="include\components\meshfilter.h" />
     <ClInclude Include="include\components\texturefilter.h" />

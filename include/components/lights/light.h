@@ -18,7 +18,7 @@ namespace RAY_NAMESPACE
 				inline Light(const float intensity) :
 					Component("Light"),
 					intensity(intensity) {}
-				inline ~Light() {}
+				inline virtual ~Light() {}
 
 				virtual inline DataObjects::Lumination luminance(const DataObjects::Fragment& fragment) = 0;
 

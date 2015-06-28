@@ -16,7 +16,11 @@ namespace RAY_NAMESPACE
 					Component("Camera"),
 					aperture(4.0f, 3.0f),
 					focalDepth(-1.0f) {}
-				inline ~Camera() {}
+				inline Camera(const vec2& aperture, const float focalDepth) :
+					Component("Camera"),
+					aperture(aperture),
+					focalDepth(focalDepth) {}
+				inline virtual ~Camera() {}
 
 				inline void adjust(float width, float height);
 				inline void adjust();

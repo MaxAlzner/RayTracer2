@@ -26,9 +26,12 @@ namespace RAY_NAMESPACE
 			}
 
 			this->components.clear();
+			this->stack = 0;
 			this->transform = 0;
-			this->material = 0;
 			this->meshfilter = 0;
+			this->material = 0;
+			this->camera = 0;
+			this->light = 0;
 		}
 
 		RAY_API bool Entity::isEmpty() const
@@ -74,6 +77,7 @@ namespace RAY_NAMESPACE
 			if (surface != 0 && type != TextureFilter::TEXTURE_NONE && this->material != 0)
 			{
 				TextureFilter* filter = new TextureFilter(surface, type);
+				this->add(filter);
 				switch (type)
 				{
 				case TextureFilter::TEXTURE_COLOR:

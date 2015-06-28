@@ -18,7 +18,7 @@ namespace RAY_NAMESPACE
 				inline SpotLight(const float angle, const float intensity) :
 					Light(intensity),
 					angle(angle) {}
-				inline ~SpotLight() {}
+				inline virtual ~SpotLight() {}
 
 				inline DataObjects::Lumination luminance(const DataObjects::Fragment& fragment);
 

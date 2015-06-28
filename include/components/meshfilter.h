@@ -16,7 +16,7 @@ namespace RAY_NAMESPACE
 			inline MeshFilter(Shapes::TraceShape* shape) :
 				Component("MeshFilter"),
 				shape(shape) {}
-			inline ~MeshFilter() {}
+			inline virtual ~MeshFilter() {}
 
 			Shapes::TraceShape* shape;
 

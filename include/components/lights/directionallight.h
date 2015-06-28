@@ -16,7 +16,7 @@ namespace RAY_NAMESPACE
 					Light() {}
 				inline DirectionalLight(const float intensity) :
 					Light(intensity) {}
-				inline ~DirectionalLight() {}
+				inline virtual ~DirectionalLight() {}
 
 				inline DataObjects::Lumination luminance(const DataObjects::Fragment& fragment);
 

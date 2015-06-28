@@ -17,7 +17,7 @@ namespace RAY_NAMESPACE
 				inline AreaLight(const vec2& area, const float intensity) :
 					Light(intensity),
 					area(area) {}
-				inline ~AreaLight() {}
+				inline virtual ~AreaLight() {}
 
 				inline DataObjects::Lumination luminance(const DataObjects::Fragment& fragment);
 

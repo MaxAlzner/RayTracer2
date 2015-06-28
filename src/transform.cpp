@@ -41,7 +41,7 @@ namespace RAY_NAMESPACE
 
 		RAY_API inline void Transform::look(const vec3& focus)
 		{
-
+			vec3 to = Math::normalize(focus - this->position);
 		}
 
 	}

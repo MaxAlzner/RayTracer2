@@ -27,6 +27,7 @@ using namespace cb::Object;
 #include "components\materials\blinnmaterial.h"
 #include "components\materials\phongmaterial.h"
 #include "components\materials\cooktorrancematerial.h"
+#include "components\materials\glassmaterial.h"
 
 #include "components\cameras\camera.h"
 

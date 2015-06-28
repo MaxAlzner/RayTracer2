@@ -21,9 +21,11 @@ namespace RAY_NAMESPACE
 					reflect(0),
 					emissive(0),
 					displacement(0) {}
-				inline ~Material() {}
+				inline virtual ~Material() {}
 
 				virtual inline DataObjects::Lumination shade(const DataObjects::Lighting& lighting, const DataObjects::Fragment& fragment) const = 0;
+
+				virtual inline DataObjects::Lumination reflection(const DataObjects::Lumination& albedo, const DataObjects::Fragment& fragment) const = 0;
 
 				virtual inline Color surfaceColor(const vec2& texcoord) const;
 				virtual inline vec3 surfaceNormal(const vec2& texcoord) const;

@@ -25,6 +25,11 @@ namespace RAY_NAMESPACE
 				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), fragment.specular * Color(phong * diffuse * lighting.attenuation));
 			}
 
+			inline Lumination PhongMaterial::reflection(const Lumination& albedo, const Fragment& fragment) const
+			{
+				return Lumination(0.0f, 0.0f);
+			}
+
 		}
 	}
 }

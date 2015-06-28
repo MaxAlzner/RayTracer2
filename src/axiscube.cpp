@@ -127,20 +127,27 @@ namespace RAY_NAMESPACE
 						break;
 					}
 
-					if (hit != 0)
-					{
-						*hit = RayHit(
-							ray,
-							t,
-							intersection,
-							texcoord,
-							this->normals[facein],
-							this->tangents[facein],
-							this->binormals[facein],
-							this);
-					}
+					vec3 normal = this->normals[facein];
+					vec3 tangent = this->tangents[facein];
+					vec3 binormal = this->binormals[facein];
 
-					return true;
+					if (Math::dot(normal, ray.direction) < 0.0f)
+					{
+						if (hit != 0)
+						{
+							*hit = RayHit(
+								ray,
+								t,
+								intersection,
+								texcoord,
+								normal,
+								tangent,
+								binormal,
+								this);
+						}
+
+						return true;
+					}
 				}
 			}
 

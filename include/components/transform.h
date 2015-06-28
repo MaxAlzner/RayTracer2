@@ -16,7 +16,7 @@ namespace RAY_NAMESPACE
 			inline Transform(Transform* parent) :
 				Component("Transform"),
 				parent(parent != this ? parent : 0) { this->zero(); }
-			inline ~Transform() {}
+			inline virtual ~Transform() {}
 
 			inline void recalculate();
 			inline void zero();

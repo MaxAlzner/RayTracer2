@@ -1,10 +1,12 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <conio.h>
 #include "..\include\RayTracer.h"
+#include <conio.h>
+#include <dirent.h>
 
 using namespace cb::Object;
+using namespace cb::Object::FileIO;
 using namespace cb::Object::Image;
 using namespace cb::Object::Mesh;
 
@@ -13,207 +15,327 @@ using namespace Ray::Shapes;
 using namespace Ray::Components;
 using namespace Ray::Tracer;
 
+static struct
+{
+	int width;
+	int height;
+	int multiSample;
+	int reflectDepth;
+} Config;
+
 static Collection::Array<TraceShape*> shapes(32);
 static Collection::Array<Surface*> textures(32);
 
 static Photo* photo = 0;
 static TraceStack* stack = 0;
 
-Entity* Build(vec3 position, vec3 rotation, vec3 scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+static void ParseAddTextureNode(XmlNode* node, Entity* entity)
+{
+	String type = XmlFile::Value(node->last_attribute("type"));
+	String src = XmlFile::Value(node->last_attribute("src"));
+	Surface* surface = new Surface;
+	surface->build();
+	textures.add(surface);
+	if (src.endsWith("bmp"))
+	{
+		Surface::ReadBitmap(surface, src);
+	}
+	else if (src.endsWith("tga"))
+	{
+		Surface::ReadTarga(surface, src);
+	}
+	else if (src.endsWith("png"))
+	{
+		Surface::ReadPng(surface, src);
+	}
+	else if (src.endsWith("jpg"))
+	{
+		Surface::ReadJpeg(surface, src);
+	}
+	else if (src.endsWith("jpeg"))
+	{
+		Surface::ReadJpeg(surface, src);
+	}
+
+	if (type == "diffuse")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_COLOR);
+	}
+	else if (type == "normal")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_NORMAL);
+	}
+	else if (type == "specular")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_SPECULAR);
+	}
+	else if (type == "transparency")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_TRANSPARENCY);
+	}
+	else if (type == "reflect")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_REFLECT);
+	}
+	else if (type == "emissive")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_EMISSIVE);
+	}
+	else if (type == "displacement")
+	{
+		entity->attach(surface, TextureFilter::TEXTURE_DISPLACEMENT);
+	}
+}
+
+static void ParseTransformNode(XmlNode* node, Entity* entity)
+{
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		float v = XmlFile::ParseFloat(node, 0.0f);
+		float x = XmlFile::ParseFloat(node->last_attribute("x"), 0.0f);
+		float y = XmlFile::ParseFloat(node->last_attribute("y"), 0.0f);
+		float z = XmlFile::ParseFloat(node->last_attribute("z"), 0.0f);
+		if (name == "translate")
+		{
+			entity->transform->position += vec3(x, y, z) + v;
+		}
+		else if (name == "rotate")
+		{
+			entity->transform->rotation += vec3(x, y, z) + v;
+		}
+		else if (name == "scale")
+		{
+			v = v == 0.0f ? 1.0f : v;
+			x = x == 0.0f ? 1.0f : x;
+			y = y == 0.0f ? 1.0f : y;
+			z = z == 0.0f ? 1.0f : z;
+			entity->transform->scale *= vec3(x, y, z) * v;
+		}
+
+		node = node->next_sibling();
+	}
+}
+
+static void ParseMaterialNode(XmlNode* node, Entity* entity)
+{
+	String type = XmlFile::Value(node->last_attribute("type"));
+	Component* material =
+		type == "Diffuse" ? new Materials::DiffuseMaterial :
+		type == "Blinn" ? new Materials::BlinnMaterial(XmlFile::ParseFloat(node->last_attribute("exponent"), 32.0f)) :
+		type == "Phong" ? new Materials::PhongMaterial(XmlFile::ParseFloat(node->last_attribute("exponent"), 16.0f)) :
+		type == "CookTorrance" ? new Materials::CookTorranceMaterial(XmlFile::ParseFloat(node->last_attribute("roughness"), 1.0f), XmlFile::ParseFloat(node->last_attribute("refractionIndex"), 1.3f)) :
+		type == "Glass" ? new Materials::GlassMaterial :
+		(Component*)0;
+	entity->add(material);
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		if (name == "add")
+		{
+			ParseAddTextureNode(node, entity);
+		}
+
+		node = node->next_sibling();
+	}
+}
+
+static void ParseShapeNode(XmlNode* node, Entity* entity)
+{
+	String type = XmlFile::Value(node->last_attribute("type"));
+	TraceShape* shape =
+		type == "Sphere" ? new Sphere :
+		type == "AxisCube" ? new AxisCube :
+		type == "OctPartitionShape" ? new OctPartitionShape :
+		(TraceShape*)0;
+	shape->build();
+	shapes.add(shape);
+	entity->attach(shape);
+}
+
+static void ParseComponentsNode(XmlNode* node, Entity* entity)
+{
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		String type = XmlFile::Value(node->last_attribute("type"));
+		if (name == "add")
+		{
+			Component* component =
+				type == "Camera" ? new Cameras::Camera(
+				vec2(XmlFile::ParseFloat(node->last_attribute("apertureX"), 4.0f), XmlFile::ParseFloat(node->last_attribute("apertureY"), 3.0f)),
+				XmlFile::ParseFloat(node->last_attribute("focalDepth"), -1.0f)) :
+				type == "DirectionalLight" ? new Lights::PointLight(XmlFile::ParseFloat(node->last_attribute("intensity"), 1.0f)) :
+				type == "PointLight" ? new Lights::DirectionalLight(XmlFile::ParseFloat(node->last_attribute("intensity"), 1.0f)) :
+				type == "SpotLight" ? new Lights::SpotLight(
+				XmlFile::ParseFloat(node->last_attribute("angle"), 60.0f),
+				XmlFile::ParseFloat(node->last_attribute("intensity"), 1.0f)) :
+				type == "AreaLight" ? new Lights::AreaLight(
+				vec2(XmlFile::ParseFloat(node->last_attribute("areaX"), 1.0f), XmlFile::ParseFloat(node->last_attribute("areaY"), 1.0f)),
+				XmlFile::ParseFloat(node->last_attribute("intensity"), 1.0f)) :
+				(Component*)0;
+			entity->add(component);
+		}
+
+		node = node->next_sibling();
+	}
+}
+
+static void ParseEntityNode(XmlNode* node)
 {
 	Entity* entity = new Entity;
 	entity->build();
-	entity->transform->position = position;
-	entity->transform->rotation = rotation;
-	entity->transform->scale = scale;
-	if (material != 0)
-	{
-		entity->add(material);
-	}
-
-	if (color != 0)
-	{
-		entity->attach(color, TextureFilter::TEXTURE_COLOR);
-	}
-
-	if (normal != 0)
-	{
-		entity->attach(normal, TextureFilter::TEXTURE_NORMAL);
-	}
-
-	if (specular != 0)
-	{
-		entity->attach(specular, TextureFilter::TEXTURE_SPECULAR);
-	}
-
 	stack->add(entity);
-	return entity;
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		if (name == "transform")
+		{
+			ParseTransformNode(node, entity);
+		}
+		else if (name == "material")
+		{
+			ParseMaterialNode(node, entity);
+		}
+		else if (name == "shape")
+		{
+			ParseShapeNode(node, entity);
+		}
+		else if (name == "components")
+		{
+			ParseComponentsNode(node, entity);
+		}
+
+		node = node->next_sibling();
+	}
 }
 
-Entity* Camera(vec3 position, vec3 rotation, vec2 aperture, float focalDepth)
+static void ParsePhotoNode(XmlNode* node)
 {
-	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
-	Cameras::Camera* camera = new Cameras::Camera();
-	entity->add(camera);
-	camera->adjust(aperture.x, aperture.y);
-	camera->focalDepth = focalDepth;
-	return entity;
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		if (name == "width")
+		{
+			Config.width = XmlFile::ParseInt(node, 400);
+		}
+		else if (name == "height")
+		{
+			Config.height = XmlFile::ParseInt(node, 300);
+		}
+		else if (name == "multiSample")
+		{
+			Config.multiSample = XmlFile::ParseInt(node, 0);
+		}
+		else if (name == "reflectDepth")
+		{
+			Config.reflectDepth = XmlFile::ParseInt(node, 0);
+		}
+
+		node = node->next_sibling();
+	}
 }
 
-Entity* StaticCube(vec3 position, float scale, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+static void ParseStackNode(XmlNode* node)
 {
-	Entity* entity = Build(position, vec3(0.0f), vec3(scale), material, color, normal, specular);
-	TraceShape* cube = new Shapes::AxisCube;
-	cube->build();
-	shapes.add(cube);
-	entity->attach(cube);
-	return entity;
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		if (name == "entity")
+		{
+			ParseEntityNode(node);
+		}
+
+		node = node->next_sibling();
+	}
 }
 
-Entity* StaticSphere(vec3 position, float radius, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
+static void ParseTraceNode(XmlNode* node)
 {
-	Entity* entity = Build(position, vec3(0.0f), vec3(1.0f), material, color, normal, specular);
-	TraceShape* sphere = new Shapes::Sphere(radius);
-	sphere->build();
-	shapes.add(sphere);
-	entity->attach(sphere);
-	return entity;
-}
+	node = node->first_node();
+	while (node != 0)
+	{
+		String name = node->name();
+		if (name == "photo")
+		{
+			ParsePhotoNode(node);
+		}
+		else if (name == "stack")
+		{
+			ParseStackNode(node);
+		}
 
-Entity* StaticMesh(vec3 position, vec3 rotation, vec3 scale, TraceShape* shape, Materials::Material* material, Surface* color, Surface* normal, Surface* specular)
-{
-	Entity* entity = Build(position, rotation, scale, material, color, normal, specular);
-	entity->attach(shape);
-	return entity;
-}
-
-Entity* PointLight(vec3 position, float intensity)
-{
-	Entity* entity = Build(position, vec3(0.0f), vec3(1.0f), 0, 0, 0, 0);
-	entity->add(new Lights::PointLight(intensity));
-	return entity;
-}
-
-Entity* DirectionalLight(vec3 rotation, float intensity)
-{
-	Entity* entity = Build(vec3(0.0f), rotation, vec3(1.0f), 0, 0, 0, 0);
-	entity->add(new Lights::DirectionalLight(intensity));
-	return entity;
-}
-
-Entity* SpotLight(vec3 position, vec3 rotation, float angle, float intensity)
-{
-	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
-	entity->add(new Lights::SpotLight(angle, intensity));
-	return entity;
-}
-
-Entity* AreaLight(vec3 position, vec3 rotation, vec2 area, float intensity)
-{
-	Entity* entity = Build(position, rotation, vec3(1.0f), 0, 0, 0, 0);
-	entity->add(new Lights::AreaLight(area, intensity));
-	return entity;
+		node = node->next_sibling();
+	}
 }
 
 int main(int argc, char** argv)
 {
-	for (int i = 0; i < 8; i++)
+	if (argc < 1 || argv == 0)
 	{
-		OctPartitionShape* shape = new OctPartitionShape;
-		shape->build();
-		shapes.add(shape);
+		return ERROR;
 	}
 
-	Shape::ReadWavefront(shapes[0], "data\\plane.obj");
+	Config.width = 400;
+	Config.height = 300;
+	Config.reflectDepth = 1;
+	Config.multiSample = 1;
 
-	for (int i = 0; i < textures.capacity(); i++)
-	{
-		Surface* surface = new Surface;
-		surface->build();
-		textures.add(surface);
-	}
-
-	Surface::ReadBitmap(textures[0], "data\\dungeon_arch_door_dif.bmp");
-	Surface::ReadBitmap(textures[1], "data\\dungeon_arch_door_normal.bmp");
-	Surface::ReadBitmap(textures[2], "data\\dungeon_arch_door_spec.bmp");
-	Surface::ReadBitmap(textures[3], "data\\dungeon_floor_dif.bmp");
-	Surface::ReadBitmap(textures[4], "data\\dungeon_floor_normal.bmp");
-	Surface::ReadBitmap(textures[5], "data\\dungeon_floor_spec.bmp");
-	Surface::ReadBitmap(textures[6], "data\\dungeon_wall_dirt_dif.bmp");
-	Surface::ReadBitmap(textures[7], "data\\dungeon_wall_dirt_normal.bmp");
-	Surface::ReadBitmap(textures[8], "data\\dungeon_wall_dirt_spec.bmp");
-
-	photo = new Photo(800, 600, 1);
-	photo->build();
 	stack = new TraceStack;
 	stack->build();
 
-	Entity* camera = Camera(vec3(0.0f, 3.6f, 0.0f), vec3(-20.0f, 0.0f, 0.0f), vec2(4.0f, 3.0f), 3.4f);
+	XmlFile* file = new XmlFile;
+	file->build();
+	String filepath = argv[0];
+	filepath.trimEnd('\\');
+	filepath.append("data\\");
 
-#if 1
-	StaticCube(
-		vec3(0.0f, 1.2f, -3.2f), 2.0f,
-		new Materials::CookTorranceMaterial(0.1f, 1.5f),
-		0,//textures[3],
-		textures[4],
-		0//textures[5]
-		);
-	StaticCube(
-		vec3(-4.0f, 1.8f, -1.8f), 1.4f,
-		new Materials::PhongMaterial(32.0f),
-		0,
-		textures[1],
-		0
-		);
-	StaticSphere(
-		vec3(-3.2f, -1.0f, 0.0f), 2.1f,
-		new Materials::PhongMaterial(24.0f),
-		0,
-		0,
-		0
-		);
-	StaticSphere(
-		vec3(-1.0f, 0.8f, 0.0f), 0.4f,
-		new Materials::BlinnMaterial(24.0f),
-		0,
-		0,
-		0
-		);
-#endif
+	DIR* directory = opendir((char*)filepath);
+	dirent* ent = readdir(directory);
+	while (ent != 0)
+	{
+		String filename = ent->d_name;
+		if (filename.endsWith("trace"))
+		{
+			file->read(filepath + filename);
+			break;
+		}
 
-#if 0
-	StaticMesh(
-		vec3(0.0f, 0.0f, 0.0f),
-		vec3(90.0f, 0.0f, 0.0f),
-		vec3(32.0f),
-		shapes[0],
-		new Materials::BlinnMaterial,
-		textures[3],
-		textures[4],
-		textures[5]
-		);
-#endif
+		ent = readdir(directory);
+	}
 
-	StaticCube(vec3(0.0f, -32.0f, 0.0f), 32.0f, new Materials::BlinnMaterial, textures[3], textures[4], textures[5]);
+	ParseTraceNode(file->root);
 
-	//DirectionalLight(vec3(-20.0f, 135.0f, 0.0f), 1.0f);
-	//PointLight(vec3(-6.4f, 0.2f, -0.8f), 1.0f);
-	//PointLight(vec3(-4.0f, 1.0f, -6.4f), 1.0f);
-	//PointLight(vec3(-2.0f, 0.2f, 0.0f), 8.0f);
-	SpotLight(vec3(6.0f, 6.4f, -2.0f), vec3(40.0f, 260.0f, 0.0f), 60.0f, 2.4f);
-	SpotLight(vec3(0.0f, 8.0f, 4.0f), vec3(60.0f, 0.0f, 0.0f), 80.0f, 4.0f);
+	file->dispose();
+	delete file;
+	closedir(directory);
 
-	const int frames = 8;
+	photo = new Photo(Config.width, Config.height, Config.reflectDepth, Config.multiSample);
+	photo->build();
+
+	const int frames = 1;
 	for (int i = 0; i < frames; i++)
 	{
 		float k = float(i) / (float(frames) * 1.0f);
-		float theta = k * Math::pi() * 2.0f;
+		float theta = (k * Math::pi() * 2.0f);
 		float u = cos(theta);
 		float v = sin(theta);
 
-		camera->transform->position.x = 8.0f * u;
-		camera->transform->position.z = 8.0f * v;
-		camera->transform->rotation.y = (k * 360.0f) + 90.0f;
+		if (stack->camera != 0)
+		{
+			stack->camera->object->transform->position.x = 12.8f * u;
+			stack->camera->object->transform->position.y = 4.4f;
+			stack->camera->object->transform->position.z = 12.8f * v;
+			stack->camera->object->transform->rotation.x = -2.0f;
+			stack->camera->object->transform->rotation.y = (k * 360.0f) + 90.0f;
+			stack->camera->object->transform->rotation.z = 0.0f;
+		}
 
 		char* filename = new char[32];
 		memset(filename, 0, sizeof(char) * 32);

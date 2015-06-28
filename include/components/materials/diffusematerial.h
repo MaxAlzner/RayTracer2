@@ -14,9 +14,11 @@ namespace RAY_NAMESPACE
 
 				inline DiffuseMaterial() :
 					Material() {}
-				inline ~DiffuseMaterial() {}
+				inline virtual ~DiffuseMaterial() {}
 
 				inline DataObjects::Lumination shade(const DataObjects::Lighting& lighting, const DataObjects::Fragment& fragment) const;
+
+				inline DataObjects::Lumination reflection(const DataObjects::Lumination& albedo, const DataObjects::Fragment& fragment) const;
 
 			};
 

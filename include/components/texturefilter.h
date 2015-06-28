@@ -22,19 +22,25 @@ namespace RAY_NAMESPACE
 				TEXTURE_DISPLACEMENT,
 			};
 
+			enum SAMPLETYPE
+			{
+				SAMPLE_NEAREST,
+				SAMPLE_LINEAR,
+			};
+
 			inline TextureFilter() :
 				Component("TextureFilter"),
 				type(TEXTURE_NONE),
 				surface(0) {}
-			inline TextureFilter(Image::Surface* surface, TEXTURETYPE type) :
+			inline TextureFilter(Image::Surface* surface, const TEXTURETYPE type) :
 				Component("TextureFilter"),
 				type(type),
 				surface(surface) {}
-			inline ~TextureFilter() {}
+			inline virtual ~TextureFilter() {}
 
-			inline Color sample(const vec2& texcoord);
+			inline Color sample(const vec2& texcoord, const SAMPLETYPE type);
 
-			TEXTURETYPE type;
+			const TEXTURETYPE type;
 			Image::Surface* surface;
 
 		};

@@ -36,6 +36,11 @@ namespace RAY_NAMESPACE
 				return Lumination(fragment.color * Color(diffuse * lighting.attenuation), fragment.specular * Color(brdf * diffuse * lighting.attenuation));
 			}
 
+			inline Lumination CookTorranceMaterial::reflection(const Lumination& albedo, const Fragment& fragment) const
+			{
+				return Lumination(0.0f, 0.0f);
+			}
+
 		}
 	}
 }

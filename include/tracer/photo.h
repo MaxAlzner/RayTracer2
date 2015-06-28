@@ -52,7 +52,6 @@ namespace RAY_NAMESPACE
 
 			int _width;
 			int _height;
-			Collection::Map<TracePath> _geometrypass;
 			Collection::Map<DataObjects::Lumination> _lightpass;
 
 		};

@@ -25,6 +25,7 @@ namespace RAY_NAMESPACE
 				Entity* entity = i.current();
 				if (entity != 0)
 				{
+					entity->dispose();
 					delete entity;
 				}
 			}
@@ -78,7 +79,7 @@ namespace RAY_NAMESPACE
 				TracePath* current = path._reflection;
 				while (current != 0 && current->_fragment.material != 0)
 				{
-					lumin += (Lumination(1.0f, 1.0f) - lumin) * light->luminance(current->_fragment) * current->_fragment.reflectivity;
+					lumin += (Lumination(1.0f, 1.0f) - lumin) * path._fragment.material->reflection(light->luminance(current->_fragment), current->_fragment);
 					current = current->_reflection;
 				}
 

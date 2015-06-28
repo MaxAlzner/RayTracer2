@@ -26,6 +26,8 @@ namespace RAY_NAMESPACE
 
 			virtual void emit();
 
+			virtual DataObjects::Lumination cast(const float u, const float v);
+
 		protected:
 
 			Photo* _photo;

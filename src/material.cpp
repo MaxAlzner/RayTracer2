@@ -13,7 +13,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->color != 0)
 				{
-					return this->color->sample(texcoord);
+					return this->color->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 				}
 
 				return Color(1.0f);
@@ -22,7 +22,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->normal != 0)
 				{
-					vec4 sample = this->normal->sample(texcoord);
+					vec4 sample = this->normal->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 					return Math::normalize(vec3((sample * 2.0f) - 1.0f));
 				}
 
@@ -32,7 +32,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->specular != 0)
 				{
-					return this->specular->sample(texcoord);
+					return this->specular->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 				}
 
 				return Color(1.0f);
@@ -41,7 +41,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->transparency != 0)
 				{
-					Color sample = this->transparency->sample(texcoord);
+					Color sample = this->transparency->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 					return (sample.r + sample.g + sample.b) / 3.0f;
 				}
 
@@ -51,7 +51,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->reflect != 0)
 				{
-					Color sample = this->reflect->sample(texcoord);
+					Color sample = this->reflect->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 					return (sample.r + sample.g + sample.b) / 3.0f;
 				}
 
@@ -61,7 +61,7 @@ namespace RAY_NAMESPACE
 			{
 				if (this->emissive != 0)
 				{
-					return this->emissive->sample(texcoord);
+					return this->emissive->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
 				}
 
 				return Color(0.0f);

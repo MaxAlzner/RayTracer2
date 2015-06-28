@@ -19,14 +19,10 @@ namespace RAY_NAMESPACE
 		{
 			this->reflectDepth = Math::max(this->reflectDepth, 0);
 			this->multiSampleDepth = Math::max(this->multiSampleDepth, 0);
-			//this->_geometrypass = Map<RayHit>(this->_width, this->_height, this->reflectDepth + 1);
-			//this->_fragmentpass = Map<Fragment>(this->_width, this->_height, this->reflectDepth + 1);
-			this->_geometrypass = Map<TracePath>(this->_width, this->_height);
 			this->_lightpass = Map<Lumination>(this->_width, this->_height);
 		}
 		RAY_API void Photo::dispose()
 		{
-			this->_geometrypass.clear();
 			this->_lightpass.clear();
 		}
 
@@ -47,8 +43,6 @@ namespace RAY_NAMESPACE
 				for (int k = 0; k < this->_width; k++)
 				{
 					Lumination luminance = this->_lightpass.get(k, i);
-					//Fragment fragment = this->_fragmentpass.get(k, i);
-
 					Color color = luminance.diffuse + luminance.specular;
 
 					//color = Color(fragment.texcoord.x, fragment.texcoord.y, 0.0f, 1.0f);
@@ -66,7 +60,6 @@ namespace RAY_NAMESPACE
 		{
 			if (stack != 0 && stack->camera != 0)
 			{
-				this->_geometrypass.zero();
 				this->_lightpass.zero();
 				for (Iterator<Entity*> i = stack->stack.iterator(); i.inside(); i.next())
 				{
