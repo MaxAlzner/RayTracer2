@@ -1,14 +1,9 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "..\include\RayTracer.h"
+#include <RayTracer.h>
 #include <conio.h>
 #include <dirent.h>
-
-using namespace cb::Object;
-using namespace cb::Object::FileIO;
-using namespace cb::Object::Image;
-using namespace cb::Object::Mesh;
 
 using namespace Ray;
 using namespace Ray::Shapes;
@@ -23,8 +18,8 @@ static struct
 	int reflectDepth;
 } Config;
 
-static Collection::Array<TraceShape*> shapes(32);
-static Collection::Array<Surface*> textures(32);
+static Array<TraceShape*> shapes(32);
+static Array<Surface*> textures(32);
 
 static Photo* photo = 0;
 static TraceStack* stack = 0;
@@ -34,28 +29,8 @@ static void ParseAddTextureNode(XmlNode* node, Entity* entity)
 	String type = XmlFile::Value(node->last_attribute("type"));
 	String src = XmlFile::Value(node->last_attribute("src"));
 	Surface* surface = new Surface;
-	surface->build();
 	textures.add(surface);
-	if (src.endsWith("bmp"))
-	{
-		Surface::ReadBitmap(surface, src);
-	}
-	else if (src.endsWith("tga"))
-	{
-		Surface::ReadTarga(surface, src);
-	}
-	else if (src.endsWith("png"))
-	{
-		Surface::ReadPng(surface, src);
-	}
-	else if (src.endsWith("jpg"))
-	{
-		Surface::ReadJpeg(surface, src);
-	}
-	else if (src.endsWith("jpeg"))
-	{
-		Surface::ReadJpeg(surface, src);
-	}
+	surface->read(src);
 
 	if (type == "diffuse")
 	{
@@ -150,7 +125,6 @@ static void ParseShapeNode(XmlNode* node, Entity* entity)
 		type == "AxisCube" ? new AxisCube :
 		type == "OctPartitionShape" ? new OctPartitionShape :
 		(TraceShape*)0;
-	shape->build();
 	shapes.add(shape);
 	entity->attach(shape);
 }
@@ -291,10 +265,8 @@ int main(int argc, char** argv)
 	stack->build();
 
 	XmlFile* file = new XmlFile;
-	file->build();
 	String filepath = argv[0];
 	filepath.trimEnd('\\');
-	filepath.append("data\\");
 
 	DIR* directory = opendir((char*)filepath);
 	dirent* ent = readdir(directory);
@@ -310,9 +282,12 @@ int main(int argc, char** argv)
 		ent = readdir(directory);
 	}
 
-	ParseTraceNode(file->root);
+	if (file->root != 0)
+	{
+		ParseTraceNode(file->root);
+	}
 
-	file->dispose();
+	file->release();
 	delete file;
 	closedir(directory);
 
@@ -323,7 +298,7 @@ int main(int argc, char** argv)
 	for (int i = 0; i < frames; i++)
 	{
 		float k = float(i) / (float(frames) * 1.0f);
-		float theta = (k * Math::pi() * 2.0f);
+		float theta = (k * PI * 2.0f);
 		float u = cos(theta);
 		float v = sin(theta);
 
@@ -343,10 +318,10 @@ int main(int argc, char** argv)
 
 		photo->render(stack);
 		Surface* surface = photo->flatten();
-		Surface::WritePng(surface, String(filename));
+		surface->write(String(filename));
 		printf("%s\n", filename);
 
-		surface->dispose();
+		surface->release();
 		delete surface;
 		delete[] filename;
 	}
@@ -361,7 +336,7 @@ int main(int argc, char** argv)
 		Surface* surface = textures[i];
 		if (surface != 0)
 		{
-			surface->dispose();
+			surface->release();
 			delete surface;
 		}
 	}
@@ -371,7 +346,7 @@ int main(int argc, char** argv)
 		Shape* shape = shapes[i];
 		if (shape != 0)
 		{
-			shape->dispose();
+			shape->release();
 			delete shape;
 		}
 	}

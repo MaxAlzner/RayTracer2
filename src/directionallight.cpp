@@ -8,7 +8,6 @@ namespace RAY_NAMESPACE
 	{
 		namespace Lights
 		{
-			using namespace Collection;
 			using namespace DataObjects;
 			using namespace Tracer;
 			using namespace Materials;

@@ -6,7 +6,6 @@ namespace RAY_NAMESPACE
 {
 	namespace Shapes
 	{
-		using namespace Object::Mesh;
 		using namespace DataObjects;
 
 		RAY_API void AxisCube::build()
@@ -46,17 +45,17 @@ namespace RAY_NAMESPACE
 
 			if (p0.x > p1.x)
 			{
-				Math::swap(p0.x, p1.x);
+				swap(p0.x, p1.x);
 			}
 
 			if (p0.y > p1.y)
 			{
-				Math::swap(p0.y, p1.y);
+				swap(p0.y, p1.y);
 			}
 
 			if (p0.z > p1.z)
 			{
-				Math::swap(p0.z, p1.z);
+				swap(p0.z, p1.z);
 			}
 
 			float a = 1.0f / ray.direction.x;
@@ -131,7 +130,7 @@ namespace RAY_NAMESPACE
 					vec3 tangent = this->tangents[facein];
 					vec3 binormal = this->binormals[facein];
 
-					if (Math::dot(normal, ray.direction) < 0.0f)
+					if (dot(normal, ray.direction) < 0.0f)
 					{
 						if (hit != 0)
 						{

@@ -43,7 +43,7 @@ namespace RAY_NAMESPACE
 				{
 					direction = this->focalDepth <= 0.0f ?
 						this->object->transform->forward :
-						Math::normalize(origin - this->viewport.focal);
+						normalize(origin - this->viewport.focal);
 				}
 
 				return ray(origin, direction);

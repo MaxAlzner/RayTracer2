@@ -6,8 +6,6 @@ namespace RAY_NAMESPACE
 {
 	namespace Tracer
 	{
-		using namespace Collection;
-		using namespace Object::Mesh;
 		using namespace DataObjects;
 		using namespace Components;
 		using namespace Components::Materials;
@@ -20,7 +18,7 @@ namespace RAY_NAMESPACE
 		}
 		RAY_API void TraceStack::dispose()
 		{
-			for (Iterator<Entity*> i = this->stack.iteratorAtEnd(); i.inside(); i.previous())
+			for (List<Entity*>::Iterator i = this->stack.iteratorAtEnd(); i.inside(); i.previous())
 			{
 				Entity* entity = i.current();
 				if (entity != 0)
@@ -43,7 +41,7 @@ namespace RAY_NAMESPACE
 			float cutoff = FLT_MAX;
 			RayHit nearestHit;
 			Entity* nearest = 0;
-			for (Iterator<Entity*> i = this->stack.iterator(); i.inside(); i.next())
+			for (List<Entity*>::Iterator i = this->stack.iterator(); i.inside(); i.next())
 			{
 				Entity* entity = i.current();
 				if (entity != 0 && entity->meshfilter != 0 && entity->meshfilter->shape != 0)
@@ -71,7 +69,7 @@ namespace RAY_NAMESPACE
 		RAY_API Lumination TraceStack::albedo(const TracePath& path)
 		{
 			Lumination albedo;
-			for (Iterator<Light*> i = this->lights.iterator(); i.inside(); i.next())
+			for (List<Light*>::Iterator i = this->lights.iterator(); i.inside(); i.next())
 			{
 				Light* light = i.current();
 				Lumination lumin = light->luminance(path._fragment);

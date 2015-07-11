@@ -18,7 +18,7 @@ namespace RAY_NAMESPACE
 				_photo(photo),
 				_stack(stack),
 				_area(ivec2(0), ivec2(photo->_width, photo->_height)) {}
-			inline PhotoEmitter(Photo* photo, TraceStack* stack, const ibox& area) :
+			inline PhotoEmitter(Photo* photo, TraceStack* stack, const tbox<int>& area) :
 				_photo(photo),
 				_stack(stack),
 				_area(area) {}
@@ -32,7 +32,7 @@ namespace RAY_NAMESPACE
 
 			Photo* _photo;
 			TraceStack* _stack;
-			ibox _area;
+			tbox<int> _area;
 
 		};
 

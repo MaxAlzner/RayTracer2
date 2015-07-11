@@ -22,8 +22,9 @@ namespace RAY_NAMESPACE
 			{
 				if (this->normal != 0)
 				{
-					vec4 sample = this->normal->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
-					return Math::normalize(vec3((sample * 2.0f) - 1.0f));
+					Color sample = this->normal->sample(texcoord, TextureFilter::SAMPLE_LINEAR);
+					vec3 raw(sample.r, sample.g, sample.b);
+					return normalize((raw * 2.0f) - 1.0f);
 				}
 
 				return vec3(0.0f, 0.0f, 1.0f);

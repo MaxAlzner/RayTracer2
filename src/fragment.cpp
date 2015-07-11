@@ -29,15 +29,15 @@ namespace RAY_NAMESPACE
 				vec3 surfaceNormal = this->material->surfaceNormal(this->texcoord);
 				mat3 space(hit.tangent, hit.binormal, hit.normal);
 
-				this->normal = Math::normalize(space * surfaceNormal);
-				this->tangent = Math::cross(-hit.binormal, this->normal);
-				this->binormal = Math::cross(this->tangent, this->normal);
+				this->normal = normalize(space * surfaceNormal);
+				this->tangent = cross(-hit.binormal, this->normal);
+				this->binormal = cross(this->tangent, this->normal);
 			}
 		}
 
 		inline RAY_API ray Fragment::reflect(const ray& r)
 		{
-			return ray(this->position, Math::reflect(-r.direction, this->normal));
+			return ray(this->position, gmath::reflect(-r.direction, this->normal));
 		}
 
 	}

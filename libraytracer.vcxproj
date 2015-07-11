@@ -12,7 +12,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0587DA43-C322-487A-A386-6E8D3700983B}</ProjectGuid>
-    <RootNamespace>raytracer</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -33,74 +32,44 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Common.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Common.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <TargetName>RayTracer</TargetName>
+    <TargetName>libraytracer</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <TargetName>RayTracer</TargetName>
+    <TargetName>libraytracer</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ColdBrew.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
-xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
       <Command>
-xcopy "$(ProjectDir)bin\$(Configuration)\*.dll" "$(ProjectDir)win32\bin\" /Y
-xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Command>
-    </PostBuildEvent>
+xcopy "$(MediaLoaderBinDir)*.dll" "$(OutDir)" /Y
+xcopy "$(MediaLoaderBinDir)*.pdb" "$(OutDir)" /Y</Command>
+    </PreBuildEvent>
+    <Link>
+      <AdditionalDependencies>libmedialoader.lib;libpng.lib;jpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ColdBrew.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.dll" "$(ProjectDir)bin\$(Configuration)\" /Y
-xcopy "$(ProjectDir)..\ColdBrew_Framework\bin\$(Configuration)\*.pdb" "$(ProjectDir)bin\$(Configuration)\" /Y</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
       <Command>
-xcopy "$(ProjectDir)bin\$(Configuration)\*.dll" "$(ProjectDir)win32\bin\" /Y
-xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Command>
-    </PostBuildEvent>
+xcopy "$(MediaLoaderBinDir)*.dll" "$(OutDir)" /Y
+xcopy "$(MediaLoaderBinDir)*.pdb" "$(OutDir)" /Y</Command>
+    </PreBuildEvent>
+    <Link>
+      <AdditionalDependencies>libmedialoader.lib;libpng.lib;jpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ColdBrew_Framework\framework.vcxproj">
-      <Project>{1cabf0b2-0645-4de5-bacd-4ba757ba00d3}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\arealight.cpp" />
     <ClCompile Include="src\axiscube.cpp" />
@@ -149,11 +118,11 @@ xcopy "$(ProjectDir)bin\$(Configuration)\*.pdb" "$(ProjectDir)win32\bin\" /Y</Co
     <ClInclude Include="include\shapes\octpartitionshape.h" />
     <ClInclude Include="include\shapes\sphere.h" />
     <ClInclude Include="include\RayTracer.h" />
-    <ClInclude Include="include\RayTracer_setup.h" />
     <ClInclude Include="include\shapes\traceshape.h" />
     <ClInclude Include="include\tracer\entity.h" />
     <ClInclude Include="include\dataobjects\lighting.h" />
     <ClInclude Include="include\dataobjects\lumination.h" />
+    <ClInclude Include="include\tracer\object.h" />
     <ClInclude Include="include\tracer\photo.h" />
     <ClInclude Include="include\tracer\photoemitter.h" />
     <ClInclude Include="include\dataobjects\fragment.h" />

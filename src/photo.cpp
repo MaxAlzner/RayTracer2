@@ -6,19 +6,14 @@ namespace RAY_NAMESPACE
 {
 	namespace Tracer
 	{
-		using namespace Collection;
-		using namespace Threading;
-		using namespace Object::Image;
-		using namespace Object::Mesh;
-
 		using namespace DataObjects;
 		using namespace Components;
 		using namespace Components::Lights;
 
 		RAY_API void Photo::build()
 		{
-			this->reflectDepth = Math::max(this->reflectDepth, 0);
-			this->multiSampleDepth = Math::max(this->multiSampleDepth, 0);
+			this->reflectDepth = max(this->reflectDepth, 0);
+			this->multiSampleDepth = max(this->multiSampleDepth, 0);
 			this->_lightpass = Map<Lumination>(this->_width, this->_height);
 		}
 		RAY_API void Photo::dispose()
@@ -34,7 +29,6 @@ namespace RAY_NAMESPACE
 		RAY_API Surface* Photo::flatten()
 		{
 			Surface* surface = new Surface;
-			surface->build();
 			surface->reformat(PIXELFORMAT::PIXELFORMAT_RGBA);
 			surface->resize(this->_width, this->_height);
 
@@ -61,7 +55,7 @@ namespace RAY_NAMESPACE
 			if (stack != 0 && stack->camera != 0)
 			{
 				this->_lightpass.zero();
-				for (Iterator<Entity*> i = stack->stack.iterator(); i.inside(); i.next())
+				for (List<Entity*>::Iterator i = stack->stack.iterator(); i.inside(); i.next())
 				{
 					Entity* entity = i.current();
 					if (entity != 0)
@@ -78,7 +72,7 @@ namespace RAY_NAMESPACE
 				List<Thread*> threads;
 				for (int i = 0; i < sections; i++)
 				{
-					PhotoEmitter* emitter = new PhotoEmitter(this, stack, ibox(ivec2(0, section * i), ivec2(this->_width, section * (i + 1))));
+					PhotoEmitter* emitter = new PhotoEmitter(this, stack, tbox<int>(ivec2(0, section * i), ivec2(this->_width, section * (i + 1))));
 					emitters.add(emitter);
 					Thread* thread = new Thread;
 					thread->callstack += Photo::_renderCallback;
@@ -86,7 +80,7 @@ namespace RAY_NAMESPACE
 					threads.add(thread);
 				}
 
-				for (Iterator<Thread*> i = threads.iterator(); i.inside(); i.next())
+				for (List<Thread*>::Iterator i = threads.iterator(); i.inside(); i.next())
 				{
 					Thread* thread = i.current();
 					if (thread != 0)
@@ -98,7 +92,7 @@ namespace RAY_NAMESPACE
 				while (true)
 				{
 					bool finished = true;
-					for (Iterator<Thread*> i = threads.iterator(); i.inside(); i.next())
+					for (List<Thread*>::Iterator i = threads.iterator(); i.inside(); i.next())
 					{
 						Thread* thread = i.current();
 						if (thread != 0)
@@ -113,7 +107,7 @@ namespace RAY_NAMESPACE
 					}
 				}
 
-				for (Iterator<PhotoEmitter*> i = emitters.iterator(); i.inside(); i.next())
+				for (List<PhotoEmitter*>::Iterator i = emitters.iterator(); i.inside(); i.next())
 				{
 					PhotoEmitter* emitter = i.current();
 					if (emitter != 0)
@@ -122,7 +116,7 @@ namespace RAY_NAMESPACE
 					}
 				}
 
-				for (Iterator<Thread*> i = threads.iterator(); i.inside(); i.next())
+				for (List<Thread*>::Iterator i = threads.iterator(); i.inside(); i.next())
 				{
 					Thread* thread = i.current();
 					if (thread != 0)

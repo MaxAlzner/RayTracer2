@@ -6,7 +6,7 @@ namespace RAY_NAMESPACE
 	namespace Tracer
 	{
 
-		class RAY_API TraceStack : public IObject
+		class RAY_API TraceStack : public Object
 		{
 		public:
 
@@ -24,8 +24,8 @@ namespace RAY_NAMESPACE
 
 			void add(Entity* entity);
 
-			Collection::List<Entity*> stack;
-			Collection::List<Components::Lights::Light*> lights;
+			List<Entity*> stack;
+			List<Components::Lights::Light*> lights;
 			Components::Cameras::Camera* camera;
 
 		};

@@ -8,7 +8,6 @@ namespace RAY_NAMESPACE
 	{
 		namespace Lights
 		{
-			using namespace Collection;
 			using namespace DataObjects;
 			using namespace Tracer;
 			using namespace Materials;
@@ -21,12 +20,12 @@ namespace RAY_NAMESPACE
 				}
 
 				vec3 l = this->object->transform->position - fragment.position;
-				float d = Math::magnitude(l);
-				l = Math::normalize(l);
+				float d = magnitude(l);
+				l = normalize(l);
 
-				float atten = Math::min(this->intensity / d, 1.0f);
-				float theta = 1.0f - Math::clamp(this->angle / 180.0f, 0.0f, 1.0f);
-				float t = Math::dot(l, this->object->transform->forward);
+				float atten = min(this->intensity / d, 1.0f);
+				float theta = 1.0f - clamp(this->angle / 180.0f, 0.0f, 1.0f);
+				float t = dot(l, this->object->transform->forward);
 
 				float penumbra = (t - theta) / (1.0f - theta);
 
@@ -42,11 +41,11 @@ namespace RAY_NAMESPACE
 				if (fragment.material != 0)
 				{
 					vec3 toLight = this->object->transform->position - fragment.position;
-					ray to(fragment.position, Math::normalize(toLight), Math::magnitude(toLight));
+					ray to(fragment.position, normalize(toLight), magnitude(toLight));
 
 					float average = 0.0f;
 					Fragment occluded;
-					occluded = this->object->stack->trace(ray(fragment.position, Math::normalize(toLight), Math::magnitude(toLight)), 0);
+					occluded = this->object->stack->trace(ray(fragment.position, normalize(toLight), magnitude(toLight)), 0);
 					average += occluded.material != 0 && occluded.material != fragment.material ? 0.0f : 1.0f;
 
 					return average == 0.0f ? 0.0f : average;

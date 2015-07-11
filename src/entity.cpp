@@ -6,7 +6,6 @@ namespace RAY_NAMESPACE
 {
 	namespace Tracer
 	{
-		using namespace Collection;
 		using namespace Components;
 
 		RAY_API void Entity::build()
@@ -16,7 +15,7 @@ namespace RAY_NAMESPACE
 		}
 		RAY_API void Entity::dispose()
 		{
-			for (Iterator<Component*> i = this->components.iteratorAtEnd(); i.inside(); i.previous())
+			for (List<Component*>::Iterator i = this->components.iteratorAtEnd(); i.inside(); i.previous())
 			{
 				Component* component = i.current();
 				if (component != 0)
@@ -97,7 +96,7 @@ namespace RAY_NAMESPACE
 
 		RAY_API Component* Entity::findComponent(String type)
 		{
-			for (Iterator<Component*> i = this->components.iterator(); i.inside(); i.next())
+			for (List<Component*>::Iterator i = this->components.iterator(); i.inside(); i.next())
 			{
 				Component* component = i.current();
 				if (component != 0 && component->type == type)

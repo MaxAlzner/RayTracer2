@@ -5,9 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E5CCF89E-B770-4666-845B-AFAC683617F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\..\ColdBrew_Framework\framework.vcxproj", "{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raytracer", "..\raytracer.vcxproj", "{0587DA43-C322-487A-A386-6E8D3700983B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libraytracer", "..\libraytracer.vcxproj", "{0587DA43-C322-487A-A386-6E8D3700983B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C007270F-D79C-4622-B731-12B96D027423}"
 EndProject
@@ -19,10 +17,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3}.Debug|Win32.Build.0 = Debug|Win32
-		{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3}.Release|Win32.ActiveCfg = Release|Win32
-		{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3}.Release|Win32.Build.0 = Release|Win32
 		{0587DA43-C322-487A-A386-6E8D3700983B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0587DA43-C322-487A-A386-6E8D3700983B}.Debug|Win32.Build.0 = Debug|Win32
 		{0587DA43-C322-487A-A386-6E8D3700983B}.Release|Win32.ActiveCfg = Release|Win32
@@ -36,7 +30,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1CABF0B2-0645-4DE5-BACD-4BA757BA00D3} = {E5CCF89E-B770-4666-845B-AFAC683617F7}
 		{0587DA43-C322-487A-A386-6E8D3700983B} = {E5CCF89E-B770-4666-845B-AFAC683617F7}
 		{98545A33-8FA3-41F9-839E-8BA45DD95B7A} = {C007270F-D79C-4622-B731-12B96D027423}
 	EndGlobalSection

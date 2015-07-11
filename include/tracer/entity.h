@@ -6,7 +6,7 @@ namespace RAY_NAMESPACE
 	namespace Tracer
 	{
 
-		class RAY_API Entity : public IObject
+		class RAY_API Entity : public Object
 		{
 		public:
 
@@ -37,7 +37,7 @@ namespace RAY_NAMESPACE
 			Components::Materials::Material* material;
 			Components::Cameras::Camera* camera;
 			Components::Lights::Light* light;
-			Collection::List<Components::Component*> components;
+			List<Components::Component*> components;
 
 		};
 

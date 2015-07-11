@@ -25,12 +25,12 @@ namespace RAY_NAMESPACE
 			void putFace(const int index, const ivec3& face);
 			void putVertex(const int index, const vec4& v);
 
-			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
+			bool hitByRay(const ray& ray, const transformation<float>& trans, DataObjects::RayHit* hit);
 
 		protected:
 
 			bool _sectionHitByRay(const ray& ray, const vec3& min, const vec3& max);
-			bool _faceHitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, const ivec3& face, DataObjects::RayHit* hit);
+			bool _faceHitByRay(const ray& ray, const transformation<float>& trans, const ivec3& face, DataObjects::RayHit* hit);
 
 			vec3 _min;
 			vec3 _max;
@@ -71,7 +71,7 @@ namespace RAY_NAMESPACE
 
 			vec3 p0;
 			vec3 p1;
-			Collection::List<ivec3*> faces;
+			List<ivec3*> faces;
 
 			union
 			{

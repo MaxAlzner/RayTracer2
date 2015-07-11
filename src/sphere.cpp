@@ -6,16 +6,15 @@ namespace RAY_NAMESPACE
 {
 	namespace Shapes
 	{
-		using namespace Object::Mesh;
 		using namespace DataObjects;
 
 		RAY_API bool Sphere::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
 		{
-			float radius = Math::magnitude(trans.scale);
+			float radius = magnitude(trans.scale);
 			vec3 p = (ray.origin - trans.translation);
-			float a = Math::dot(ray.direction, ray.direction);
-			float b = Math::dot((p * 2.0f), ray.direction);
-			float c = Math::dot(p, p) - (radius * radius);
+			float a = dot(ray.direction, ray.direction);
+			float b = dot((p * 2.0f), ray.direction);
+			float c = dot(p, p) - (radius * radius);
 			float d = (b * b) - (4.0f * a * c);
 
 			if (d >= 0.0f)
@@ -32,11 +31,11 @@ namespace RAY_NAMESPACE
 					if (t <= ray.length)
 					{
 						vec3 intersection = ray.origin + (ray.direction * t);
-						vec3 normal = Math::normalize(intersection - trans.translation);
-						vec3 tangent = Math::cross(normal, vec3(0.0f, 1.0f, 0.0f));
-						vec3 binormal = Math::cross(normal, tangent);
+						vec3 normal = gmath::normalize(intersection - trans.translation);
+						vec3 tangent = cross(normal, vec3(0.0f, 1.0f, 0.0f));
+						vec3 binormal = cross(normal, tangent);
 
-						if (Math::dot(normal, ray.direction) < 0.0f)
+						if (dot(normal, ray.direction) < 0.0f)
 						{
 							if (hit != 0)
 							{
@@ -44,7 +43,7 @@ namespace RAY_NAMESPACE
 									ray,
 									t,
 									intersection,
-									Math::clamp(vec2((normal.x + 1.0f) / 2.0f, (normal.y + 1.0f) / 2.0f), 0.0f, 1.0f),
+									clamp(vec2((normal.x + 1.0f) / 2.0f, (normal.y + 1.0f) / 2.0f), vec2(0.0f), vec2(1.0f)),
 									normal,
 									tangent,
 									binormal,

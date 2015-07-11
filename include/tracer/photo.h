@@ -6,7 +6,7 @@ namespace RAY_NAMESPACE
 	namespace Tracer
 	{
 
-		class RAY_API Photo : public IObject
+		class RAY_API Photo : public Object
 		{
 		public:
 
@@ -52,7 +52,7 @@ namespace RAY_NAMESPACE
 
 			int _width;
 			int _height;
-			Collection::Map<DataObjects::Lumination> _lightpass;
+			Map<DataObjects::Lumination> _lightpass;
 
 		};
 

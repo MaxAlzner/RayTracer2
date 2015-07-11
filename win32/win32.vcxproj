@@ -12,7 +12,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98545A33-8FA3-41F9-839E-8BA45DD95B7A}</ProjectGuid>
-    <RootNamespace>win32</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -33,9 +32,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Common.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Common.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -51,16 +52,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\ColdBrew_Framework\bin\$(Configuration)\;$(SolutionDir)..\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ColdBrew.lib;RayTracer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libmedialoader.lib;libpng.lib;jpeg.lib;libraytracer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
-      </Command>
+xcopy "$(ProjectDir)..\bin\$(Configuration)\*.dll" "$(OutDir)" /Y
+xcopy "$(ProjectDir)..\bin\$(Configuration)\*.pdb" "$(OutDir)" /Y
+xcopy "$(ProjectDir)..\data" "$(OutDir)" /Y /R /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,28 +71,25 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\ColdBrew_Framework\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\ColdBrew_Framework\bin\$(Configuration)\;$(SolutionDir)..\bin\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ColdBrew.lib;RayTracer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libmedialoader.lib;libpng.lib;jpeg.lib;libraytracer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
-      </Command>
+xcopy "$(ProjectDir)..\bin\$(Configuration)\*.dll" "$(OutDir)" /Y
+xcopy "$(ProjectDir)..\bin\$(Configuration)\*.pdb" "$(OutDir)" /Y
+xcopy "$(ProjectDir)..\data" "$(OutDir)" /Y /R /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ColdBrew_Framework\framework.vcxproj">
-      <Project>{1cabf0b2-0645-4de5-bacd-4ba757ba00d3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\raytracer.vcxproj">
+    <ProjectReference Include="..\libraytracer.vcxproj">
       <Project>{0587da43-c322-487a-a386-6e8d3700983b}</Project>
     </ProjectReference>
   </ItemGroup>

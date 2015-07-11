@@ -15,7 +15,7 @@ namespace RAY_NAMESPACE
 
 			void build();
 
-			bool hitByRay(const ray& ray, const Object::Mesh::transformation<float>& trans, DataObjects::RayHit* hit);
+			bool hitByRay(const ray& ray, const transformation<float>& trans, DataObjects::RayHit* hit);
 
 			const int elements() const;
 			const int components() const;

@@ -6,8 +6,6 @@ namespace RAY_NAMESPACE
 {
 	namespace Shapes
 	{
-		using namespace Collection;
-		using namespace Object::Mesh;
 		using namespace DataObjects;
 
 		RAY_API void OctPartitionShape::build()
@@ -67,12 +65,12 @@ namespace RAY_NAMESPACE
 		RAY_API void OctPartitionShape::putVertex(const int index, const vec4& v)
 		{
 			Shape::putVertex(index, v);
-			this->_min.x = Math::min(this->_min.x, v.x);
-			this->_min.y = Math::min(this->_min.y, v.y);
-			this->_min.z = Math::min(this->_min.z, v.z);
-			this->_max.x = Math::max(this->_max.x, v.x);
-			this->_max.y = Math::max(this->_max.y, v.y);
-			this->_max.z = Math::max(this->_max.z, v.z);
+			this->_min.x = min(this->_min.x, v.x);
+			this->_min.y = min(this->_min.y, v.y);
+			this->_min.z = min(this->_min.z, v.z);
+			this->_max.x = max(this->_max.x, v.x);
+			this->_max.y = max(this->_max.y, v.y);
+			this->_max.z = max(this->_max.z, v.z);
 		}
 
 		RAY_API bool OctPartitionShape::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
@@ -118,8 +116,8 @@ namespace RAY_NAMESPACE
 				vec3 vc = (vec3(this->vertices[face.z]) * trans.scale * trans.space) + trans.translation;
 
 #if 1
-				vec3 faceNormal = Math::normalize(Math::cross(vb - va, vc - vb));
-				if (Math::dot(ray.direction, faceNormal) > 0.0f)
+				vec3 faceNormal = gmath::normalize(cross(vb - va, vc - vb));
+				if (dot(ray.direction, faceNormal) > 0.0f)
 				{
 					continue;
 				}
@@ -164,10 +162,10 @@ namespace RAY_NAMESPACE
 								ray,
 								t,
 								ray.origin + (ray.direction * t),
-								Math::clamp(vec2((alpha * ta) + (beta * tb) + (gamma * tc)), 0.0f, 1.0f),
-								Math::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
-								Math::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
-								Math::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
+								clamp(vec2((alpha * ta) + (beta * tb) + (gamma * tc)), vec2(0.0f), vec2(1.0f)),
+								gmath::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
+								gmath::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
+								gmath::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
 								this);
 						}
 
@@ -228,8 +226,8 @@ namespace RAY_NAMESPACE
 			vec3 vc = (vec3(this->vertices[face.z]) * trans.scale * trans.space) + trans.translation;
 
 #if 0
-			vec3 faceNormal = Math::normalize(Math::cross(vb - va, vc - vb));
-			if (Math::dot(ray.direction, faceNormal) > 0.0f)
+			vec3 faceNormal = normalize(cross(vb - va, vc - vb));
+			if (dot(ray.direction, faceNormal) > 0.0f)
 			{
 				continue;
 			}
@@ -270,10 +268,10 @@ namespace RAY_NAMESPACE
 							ray,
 							t,
 							ray.origin + (ray.direction * t),
-							Math::clamp(vec2((alpha * this->texcoords[face.x]) + (beta * this->texcoords[face.y]) + (gamma * this->texcoords[face.z])), 0.0f, 1.0f),
-							Math::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
-							Math::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
-							Math::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
+							clamp(vec2((alpha * this->texcoords[face.x]) + (beta * this->texcoords[face.y]) + (gamma * this->texcoords[face.z])), vec2(0.0f), vec2(1.0f)),
+							gmath::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
+							gmath::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
+							gmath::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
 							this);
 					}
 

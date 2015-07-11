@@ -10,22 +10,22 @@ namespace RAY_NAMESPACE
 		RAY_API inline void Transform::recalculate()
 		{
 			this->space = mat4(1.0f);
-			this->space *= Math::rotateX(this->rotation.x);
-			this->space *= Math::rotateY(this->rotation.y);
-			this->space *= Math::rotateZ(this->rotation.z);
+			this->space *= rotateX(this->rotation.x);
+			this->space *= rotateY(this->rotation.y);
+			this->space *= rotateZ(this->rotation.z);
 
 			this->transformation = mat4(1.0f);
-			this->transformation *= Math::translate(this->position);
-			this->transformation *= Math::rotateX(this->rotation.x);
-			this->transformation *= Math::rotateY(this->rotation.y);
-			this->transformation *= Math::rotateZ(this->rotation.z);
+			this->transformation *= translate(this->position);
+			this->transformation *= rotateX(this->rotation.x);
+			this->transformation *= rotateY(this->rotation.y);
+			this->transformation *= rotateZ(this->rotation.z);
 			this->transformation *= this->space;
-			this->transformation *= Math::scale(this->scale);
+			this->transformation *= gmath::scale(this->scale);
 
 			mat3 spaceNormal = mat3(this->space);
-			this->right = Math::normalize(vec3(1.0f, 0.0f, 0.0f) * spaceNormal);
-			this->up = Math::normalize(vec3(0.0f, 1.0f, 0.0f) * spaceNormal);
-			this->forward = Math::normalize(vec3(0.0f, 0.0f, 1.0f) * spaceNormal);
+			this->right = normalize(vec3(1.0f, 0.0f, 0.0f) * spaceNormal);
+			this->up = normalize(vec3(0.0f, 1.0f, 0.0f) * spaceNormal);
+			this->forward = normalize(vec3(0.0f, 0.0f, 1.0f) * spaceNormal);
 		}
 		RAY_API inline void Transform::zero()
 		{
@@ -41,7 +41,7 @@ namespace RAY_NAMESPACE
 
 		RAY_API inline void Transform::look(const vec3& focus)
 		{
-			vec3 to = Math::normalize(focus - this->position);
+			vec3 to = normalize(focus - this->position);
 		}
 
 	}
