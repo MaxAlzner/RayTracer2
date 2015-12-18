@@ -17,7 +17,7 @@ namespace RAY_NAMESPACE
 			inline PhotoEmitter(Photo* photo, TraceStack* stack) :
 				_photo(photo),
 				_stack(stack),
-				_area(ivec2(0), ivec2(photo->_width, photo->_height)) {}
+				_area(glm::ivec2(0), glm::ivec2(photo->_width, photo->_height)) {}
 			inline PhotoEmitter(Photo* photo, TraceStack* stack, const tbox<int>& area) :
 				_photo(photo),
 				_stack(stack),

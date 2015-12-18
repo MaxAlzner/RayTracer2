@@ -33,7 +33,7 @@ namespace RAY_NAMESPACE
 			this->light = 0;
 		}
 
-		RAY_API bool Entity::isEmpty() const
+		RAY_API bool Entity::empty() const
 		{
 			return this->transform == 0 && this->material == 0 && this->meshfilter == 0 && this->components.count() < 1;
 		}
@@ -94,7 +94,7 @@ namespace RAY_NAMESPACE
 			}
 		}
 
-		RAY_API Component* Entity::findComponent(String type)
+		RAY_API Component* Entity::findComponent(const String& type)
 		{
 			for (List<Component*>::Iterator i = this->components.iterator(); i.inside(); i.next())
 			{

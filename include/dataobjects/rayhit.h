@@ -21,11 +21,11 @@ namespace RAY_NAMESPACE
 			inline RayHit(
 				const ray& r,
 				const float distance,
-				const vec3& intersection,
-				const vec2& texcoord,
-				const vec3& normal,
-				const vec3& tangent,
-				const vec3& binormal,
+				const glm::vec3& intersection,
+				const glm::vec2& texcoord,
+				const glm::vec3& normal,
+				const glm::vec3& tangent,
+				const glm::vec3& binormal,
 				const Shapes::TraceShape* shape
 				) :
 				ray(r),
@@ -61,11 +61,11 @@ namespace RAY_NAMESPACE
 
 			ray ray;
 			float distance;
-			vec3 intersection;
-			vec2 texcoord;
-			vec3 normal;
-			vec3 tangent;
-			vec3 binormal;
+			glm::vec3 intersection;
+			glm::vec2 texcoord;
+			glm::vec3 normal;
+			glm::vec3 tangent;
+			glm::vec3 binormal;
 			const Shapes::TraceShape* shape;
 
 		};

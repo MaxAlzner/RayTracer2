@@ -83,3 +83,6 @@ _old/*
 *.suo
 *.opensdf
 *.vcxproj.user
+
+lib/MediaLoader/bin/*
+lib/MediaLoader/obj/*

@@ -17,7 +17,7 @@ namespace RAY_NAMESPACE
 			void build();
 			void dispose();
 
-			bool isEmpty() const;
+			bool empty() const;
 
 			DataObjects::Fragment trace(const ray& ray, DataObjects::RayHit* hit);
 			DataObjects::Lumination albedo(const TracePath& path);

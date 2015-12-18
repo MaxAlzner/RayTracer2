@@ -31,10 +31,10 @@ namespace RAY_NAMESPACE
 					int y1 = min(y0 + 1, this->surface->height());
 
 					return
-						(PackPixel(this->surface->get(x0, y0), this->surface->format()) * magnitude(linear0)) +
-						(PackPixel(this->surface->get(x1, y0), this->surface->format()) * magnitude(linear1)) +
-						(PackPixel(this->surface->get(x0, y1), this->surface->format()) * magnitude(linear2)) +
-						(PackPixel(this->surface->get(x1, y1), this->surface->format()) * magnitude(linear3));
+						(PackPixel(this->surface->get(x0, y0), this->surface->format()) * glm::length(linear0)) +
+						(PackPixel(this->surface->get(x1, y0), this->surface->format()) * glm::length(linear1)) +
+						(PackPixel(this->surface->get(x0, y1), this->surface->format()) * glm::length(linear2)) +
+						(PackPixel(this->surface->get(x1, y1), this->surface->format()) * glm::length(linear3));
 				}
 			}
 

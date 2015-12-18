@@ -13,7 +13,7 @@ namespace RAY_NAMESPACE
 
 			inline RAY_API Lumination PhongMaterial::shade(const Lighting& lighting, const Fragment& fragment) const
 			{
-				vec3 r = gmath::reflect(-lighting.light, fragment.normal);
+				vec3 r = glm::reflect(-lighting.light, fragment.normal);
 
 				float n_dot_l = dot(lighting.light, fragment.normal);
 				float r_dot_v = dot(r, fragment.view);

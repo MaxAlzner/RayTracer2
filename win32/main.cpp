@@ -298,7 +298,7 @@ int main(int argc, char** argv)
 	for (int i = 0; i < frames; i++)
 	{
 		float k = float(i) / (float(frames) * 1.0f);
-		float theta = (k * PI * 2.0f);
+		float theta = (k * M_PI * 2.0f);
 		float u = cos(theta);
 		float v = sin(theta);
 

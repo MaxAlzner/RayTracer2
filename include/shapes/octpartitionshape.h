@@ -22,18 +22,18 @@ namespace RAY_NAMESPACE
 			void build();
 			void dispose();
 
-			void putFace(const int index, const ivec3& face);
-			void putVertex(const int index, const vec4& v);
+			void putFace(const int index, const glm::ivec3& face);
+			void putVertex(const int index, const glm::vec4& v);
 
 			bool hitByRay(const ray& ray, const transformation<float>& trans, DataObjects::RayHit* hit);
 
 		protected:
 
-			bool _sectionHitByRay(const ray& ray, const vec3& min, const vec3& max);
-			bool _faceHitByRay(const ray& ray, const transformation<float>& trans, const ivec3& face, DataObjects::RayHit* hit);
+			bool _sectionHitByRay(const ray& ray, const glm::vec3& min, const glm::vec3& max);
+			bool _faceHitByRay(const ray& ray, const transformation<float>& trans, const glm::ivec3& face, DataObjects::RayHit* hit);
 
-			vec3 _min;
-			vec3 _max;
+			glm::vec3 _min;
+			glm::vec3 _max;
 			OctPartition* _base;
 
 		};
@@ -52,7 +52,7 @@ namespace RAY_NAMESPACE
 				subsection5(0),
 				subsection6(0),
 				subsection7(0) {}
-			inline OctPartition(const vec3& p0, const vec3& p1) :
+			inline OctPartition(const glm::vec3& p0, const glm::vec3& p1) :
 				p0(p0),
 				p1(p1),
 				subsection0(0),
@@ -67,11 +67,11 @@ namespace RAY_NAMESPACE
 
 			inline void clear();
 
-			inline OctPartition* get(const vec3& p);
+			inline OctPartition* get(const glm::vec3& p);
 
-			vec3 p0;
-			vec3 p1;
-			List<ivec3*> faces;
+			glm::vec3 p0;
+			glm::vec3 p1;
+			List<glm::ivec3*> faces;
 
 			union
 			{

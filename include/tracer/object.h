@@ -13,7 +13,7 @@ namespace RAY_NAMESPACE
 			virtual void build() = 0;
 			virtual void dispose() = 0;
 
-			virtual bool isEmpty() const = 0;
+			virtual bool empty() const = 0;
 
 		};
 

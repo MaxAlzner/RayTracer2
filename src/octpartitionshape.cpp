@@ -116,7 +116,7 @@ namespace RAY_NAMESPACE
 				vec3 vc = (vec3(this->vertices[face.z]) * trans.scale * trans.space) + trans.translation;
 
 #if 1
-				vec3 faceNormal = gmath::normalize(cross(vb - va, vc - vb));
+				vec3 faceNormal = glm::normalize(cross(vb - va, vc - vb));
 				if (dot(ray.direction, faceNormal) > 0.0f)
 				{
 					continue;
@@ -163,9 +163,9 @@ namespace RAY_NAMESPACE
 								t,
 								ray.origin + (ray.direction * t),
 								clamp(vec2((alpha * ta) + (beta * tb) + (gamma * tc)), vec2(0.0f), vec2(1.0f)),
-								gmath::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
-								gmath::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
-								gmath::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
+								glm::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
+								glm::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
+								glm::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
 								this);
 						}
 
@@ -269,9 +269,9 @@ namespace RAY_NAMESPACE
 							t,
 							ray.origin + (ray.direction * t),
 							clamp(vec2((alpha * this->texcoords[face.x]) + (beta * this->texcoords[face.y]) + (gamma * this->texcoords[face.z])), vec2(0.0f), vec2(1.0f)),
-							gmath::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
-							gmath::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
-							gmath::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
+							glm::normalize((alpha * this->normals[face.x]) + (beta * this->normals[face.y]) + (gamma * this->normals[face.z])),
+							glm::normalize((alpha * this->tangents[face.x]) + (beta * this->tangents[face.y]) + (gamma * this->tangents[face.z])),
+							glm::normalize((alpha * this->binormals[face.x]) + (beta * this->binormals[face.y]) + (gamma * this->binormals[face.z])),
 							this);
 					}
 

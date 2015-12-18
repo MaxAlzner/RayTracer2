@@ -21,17 +21,17 @@ namespace RAY_NAMESPACE
 			inline void recalculate();
 			inline void zero();
 
-			inline void look(const vec3& focus);
+			inline void look(const glm::vec3& focus);
 
 			const Transform* parent;
-			mat4 transformation;
-			mat4 space;
-			vec3 position;
-			vec3 rotation;
-			vec3 scale;
-			vec3 right;
-			vec3 up;
-			vec3 forward;
+			glm::mat4 transformation;
+			glm::mat4 space;
+			glm::vec3 position;
+			glm::vec3 rotation;
+			glm::vec3 scale;
+			glm::vec3 right;
+			glm::vec3 up;
+			glm::vec3 forward;
 
 		};
 

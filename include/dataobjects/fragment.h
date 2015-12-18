@@ -50,12 +50,12 @@ namespace RAY_NAMESPACE
 
 			inline ray reflect(const ray& r);
 
-			vec3 position;
-			vec2 texcoord;
-			vec3 normal;
-			vec3 tangent;
-			vec3 binormal;
-			vec3 view;
+			glm::vec3 position;
+			glm::vec2 texcoord;
+			glm::vec3 normal;
+			glm::vec3 tangent;
+			glm::vec3 binormal;
+			glm::vec3 view;
 			float transparency;
 			float reflectivity;
 			Color color;

@@ -22,14 +22,14 @@ namespace RAY_NAMESPACE
 			virtual void build();
 			virtual void dispose();
 
-			virtual bool isEmpty() const;
+			virtual bool empty() const;
 
 			void add(Components::Component* component);
 
 			void attach(Shapes::TraceShape* shape);
 			void attach(Image::Surface* surface, Components::TextureFilter::TEXTURETYPE type);
 
-			Components::Component* findComponent(String type);
+			Components::Component* findComponent(const String& type);
 
 			TraceStack* stack;
 			Components::Transform* transform;

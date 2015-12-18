@@ -1,8 +1,16 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+
 #include <MediaLoader.h>
 
-#include <gmath.hpp>
+#include <float.h>
+
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <ray.hpp>
+#include <box.hpp>
+
 #include <delegate.hpp>
 #include <array.hpp>
 #include <list.hpp>
@@ -24,7 +32,6 @@
 
 namespace RAY_NAMESPACE
 {
-	using namespace gmath;
 	using namespace medialoader;
 	using namespace medialoader::Image;
 	using namespace medialoader::Mesh;
@@ -86,9 +93,6 @@ namespace RAY_NAMESPACE
 		class RAY_API PhotoEmitter;
 	}
 }
-
-//using namespace cb;
-//using namespace cb::Object;
 
 #include "dataobjects\rayhit.h"
 #include "dataobjects\lumination.h"

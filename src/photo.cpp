@@ -21,7 +21,7 @@ namespace RAY_NAMESPACE
 			this->_lightpass.clear();
 		}
 
-		RAY_API bool Photo::isEmpty() const
+		RAY_API bool Photo::empty() const
 		{
 			return this->_width < 1 && this->_height < 1;
 		}

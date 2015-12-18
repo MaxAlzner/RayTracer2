@@ -31,7 +31,7 @@ namespace RAY_NAMESPACE
 			this->stack.clear();
 		}
 
-		RAY_API bool TraceStack::isEmpty() const
+		RAY_API bool TraceStack::empty() const
 		{
 			return this->stack.count() < 1;
 		}

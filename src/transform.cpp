@@ -10,17 +10,17 @@ namespace RAY_NAMESPACE
 		RAY_API inline void Transform::recalculate()
 		{
 			this->space = mat4(1.0f);
-			this->space *= rotateX(this->rotation.x);
-			this->space *= rotateY(this->rotation.y);
-			this->space *= rotateZ(this->rotation.z);
+			this->space *= glm::rotateX(glm::vec3(1.0f, 0.0f, 0.0f), this->rotation.x);
+			this->space *= glm::rotateY(glm::vec3(0.0f, 1.0f, 0.0f), this->rotation.y);
+			this->space *= glm::rotateZ(glm::vec3(0.0f, 0.0f, 1.0f), this->rotation.z);
 
 			this->transformation = mat4(1.0f);
 			this->transformation *= translate(this->position);
-			this->transformation *= rotateX(this->rotation.x);
-			this->transformation *= rotateY(this->rotation.y);
-			this->transformation *= rotateZ(this->rotation.z);
+			this->transformation *= glm::rotateX(glm::vec3(1.0f, 0.0f, 0.0f), this->rotation.x);
+			this->transformation *= glm::rotateY(glm::vec3(0.0f, 1.0f, 0.0f), this->rotation.y);
+			this->transformation *= glm::rotateZ(glm::vec3(0.0f, 0.0f, 1.0f), this->rotation.z);
 			this->transformation *= this->space;
-			this->transformation *= gmath::scale(this->scale);
+			this->transformation *= glm::scale(this->scale);
 
 			mat3 spaceNormal = mat3(this->space);
 			this->right = normalize(vec3(1.0f, 0.0f, 0.0f) * spaceNormal);

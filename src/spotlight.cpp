@@ -20,7 +20,7 @@ namespace RAY_NAMESPACE
 				}
 
 				vec3 l = this->object->transform->position - fragment.position;
-				float d = magnitude(l);
+				float d = glm::length(l);
 				l = normalize(l);
 
 				float atten = min(this->intensity / d, 1.0f);
@@ -41,11 +41,11 @@ namespace RAY_NAMESPACE
 				if (fragment.material != 0)
 				{
 					vec3 toLight = this->object->transform->position - fragment.position;
-					ray to(fragment.position, normalize(toLight), magnitude(toLight));
+					ray to(fragment.position, normalize(toLight), glm::length(toLight));
 
 					float average = 0.0f;
 					Fragment occluded;
-					occluded = this->object->stack->trace(ray(fragment.position, normalize(toLight), magnitude(toLight)), 0);
+					occluded = this->object->stack->trace(ray(fragment.position, normalize(toLight), glm::length(toLight)), 0);
 					average += occluded.material != 0 && occluded.material != fragment.material ? 0.0f : 1.0f;
 
 					return average == 0.0f ? 0.0f : average;

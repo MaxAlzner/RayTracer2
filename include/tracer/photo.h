@@ -37,7 +37,7 @@ namespace RAY_NAMESPACE
 			virtual void build();
 			virtual void dispose();
 
-			virtual bool isEmpty() const;
+			virtual bool empty() const;
 
 			Image::Surface* flatten();
 

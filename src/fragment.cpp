@@ -37,7 +37,7 @@ namespace RAY_NAMESPACE
 
 		inline RAY_API ray Fragment::reflect(const ray& r)
 		{
-			return ray(this->position, gmath::reflect(-r.direction, this->normal));
+			return ray(this->position, glm::reflect(-r.direction, this->normal));
 		}
 
 	}

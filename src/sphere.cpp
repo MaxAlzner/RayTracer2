@@ -10,7 +10,7 @@ namespace RAY_NAMESPACE
 
 		RAY_API bool Sphere::hitByRay(const ray& ray, const transformation<float>& trans, RayHit* hit)
 		{
-			float radius = magnitude(trans.scale);
+			float radius = glm::length(trans.scale);
 			vec3 p = (ray.origin - trans.translation);
 			float a = dot(ray.direction, ray.direction);
 			float b = dot((p * 2.0f), ray.direction);
@@ -31,7 +31,7 @@ namespace RAY_NAMESPACE
 					if (t <= ray.length)
 					{
 						vec3 intersection = ray.origin + (ray.direction * t);
-						vec3 normal = gmath::normalize(intersection - trans.translation);
+						vec3 normal = glm::normalize(intersection - trans.translation);
 						vec3 tangent = cross(normal, vec3(0.0f, 1.0f, 0.0f));
 						vec3 binormal = cross(normal, tangent);
 

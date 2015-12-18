@@ -45,17 +45,17 @@ namespace RAY_NAMESPACE
 
 			if (p0.x > p1.x)
 			{
-				swap(p0.x, p1.x);
+				std::swap(p0.x, p1.x);
 			}
 
 			if (p0.y > p1.y)
 			{
-				swap(p0.y, p1.y);
+				std::swap(p0.y, p1.y);
 			}
 
 			if (p0.z > p1.z)
 			{
-				swap(p0.z, p1.z);
+				std::swap(p0.z, p1.z);
 			}
 
 			float a = 1.0f / ray.direction.x;

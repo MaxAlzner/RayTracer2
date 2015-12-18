@@ -14,7 +14,7 @@ namespace RAY_NAMESPACE
 
 				inline AreaLight() :
 					Light() {}
-				inline AreaLight(const vec2& area, const float intensity) :
+				inline AreaLight(const glm::vec2& area, const float intensity) :
 					Light(intensity),
 					area(area) {}
 				inline virtual ~AreaLight() {}
@@ -23,7 +23,7 @@ namespace RAY_NAMESPACE
 
 				inline float occlusion(const DataObjects::Fragment& fragment);
 
-				vec2 area;
+				glm::vec2 area;
 
 			};
 

@@ -1,15 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E5CCF89E-B770-4666-845B-AFAC683617F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libraytracer", "..\libraytracer.vcxproj", "{0587DA43-C322-487A-A386-6E8D3700983B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libraytracer", "libraytracer.vcxproj", "{0587DA43-C322-487A-A386-6E8D3700983B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4} = {F867380D-DFF9-458E-8EEA-98C678B79BC4}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C007270F-D79C-4622-B731-12B96D027423}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win32", "..\win32\win32.vcxproj", "{98545A33-8FA3-41F9-839E-8BA45DD95B7A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win32", "win32\win32.vcxproj", "{98545A33-8FA3-41F9-839E-8BA45DD95B7A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4} = {F867380D-DFF9-458E-8EEA-98C678B79BC4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmedialoader", "lib\MediaLoader\libmedialoader.vcxproj", "{F867380D-DFF9-458E-8EEA-98C678B79BC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +33,10 @@ Global
 		{98545A33-8FA3-41F9-839E-8BA45DD95B7A}.Debug|Win32.Build.0 = Debug|Win32
 		{98545A33-8FA3-41F9-839E-8BA45DD95B7A}.Release|Win32.ActiveCfg = Release|Win32
 		{98545A33-8FA3-41F9-839E-8BA45DD95B7A}.Release|Win32.Build.0 = Release|Win32
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4}.Debug|Win32.Build.0 = Debug|Win32
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4}.Release|Win32.ActiveCfg = Release|Win32
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +44,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0587DA43-C322-487A-A386-6E8D3700983B} = {E5CCF89E-B770-4666-845B-AFAC683617F7}
 		{98545A33-8FA3-41F9-839E-8BA45DD95B7A} = {C007270F-D79C-4622-B731-12B96D027423}
+		{F867380D-DFF9-458E-8EEA-98C678B79BC4} = {E5CCF89E-B770-4666-845B-AFAC683617F7}
 	EndGlobalSection
 EndGlobal

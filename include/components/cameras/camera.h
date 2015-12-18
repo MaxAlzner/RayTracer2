@@ -16,7 +16,7 @@ namespace RAY_NAMESPACE
 					Component("Camera"),
 					aperture(4.0f, 3.0f),
 					focalDepth(-1.0f) {}
-				inline Camera(const vec2& aperture, const float focalDepth) :
+				inline Camera(const glm::vec2& aperture, const float focalDepth) :
 					Component("Camera"),
 					aperture(aperture),
 					focalDepth(focalDepth) {}
@@ -26,9 +26,9 @@ namespace RAY_NAMESPACE
 				inline void adjust();
 
 				inline ray getRay(float u, float v);
-				inline ray getRay(vec2& uv);
+				inline ray getRay(glm::vec2& uv);
 
-				vec2 aperture;
+				glm::vec2 aperture;
 				float focalDepth;
 
 			protected:
@@ -36,13 +36,13 @@ namespace RAY_NAMESPACE
 				struct
 				{
 
-					vec3 p1;
-					vec3 p2;
-					vec3 p3;
-					vec3 p4;
-					vec3 px;
-					vec3 py;
-					vec3 focal;
+					glm::vec3 p1;
+					glm::vec3 p2;
+					glm::vec3 p3;
+					glm::vec3 p4;
+					glm::vec3 px;
+					glm::vec3 py;
+					glm::vec3 focal;
 
 				} viewport;
 
